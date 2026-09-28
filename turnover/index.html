@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Employee Turnover Cost Calculator | Tabu</title>
-<meta name="description" content="Estimate the real cost of losing an employee - vacancy, recruitment, onboarding and more.">
+<title>Kalkulator troška odlaska zaposlenika | Tabu</title>
+<meta name="description" content="Procijeni stvarni trošak odlaska zaposlenika - prazna pozicija, zapošljavanje, onboarding i ostalo.">
 <link rel="canonical" href="https://kalkulator.tabu.hr/turnover/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tabu">
 <meta property="og:url" content="https://kalkulator.tabu.hr/turnover/">
-<meta property="og:title" content="Employee Turnover Cost Calculator | Tabu">
-<meta property="og:description" content="Estimate the real cost of losing an employee - vacancy, recruitment, onboarding and more.">
+<meta property="og:title" content="Kalkulator troška odlaska zaposlenika | Tabu">
+<meta property="og:description" content="Procijeni stvarni trošak odlaska zaposlenika - prazna pozicija, zapošljavanje, onboarding i ostalo.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
 <link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
@@ -186,8 +186,8 @@
       </a>
     </div>
     <div class="lang-toggle" role="group" aria-label="Language">
-      <button id="lang-hr" data-lang="hr">HR</button>
-      <button id="lang-en" data-lang="en" class="active">EN</button>
+      <button id="lang-hr" data-lang="hr" class="active">HR</button>
+      <button id="lang-en" data-lang="en">EN</button>
     </div>
   </header>
 
@@ -399,11 +399,11 @@ const I18N = {
   }
 };
 
-// Language: ?lang=hr|en, else browser language, fallback EN
+// Language: ?lang=hr|en, default HR
 function initialLang(){
   const p = new URLSearchParams(location.search).get('lang');
   if(p==='hr' || p==='en') return p;
-  return (navigator.language||'').toLowerCase().startsWith('hr') ? 'hr' : 'en';
+  return 'hr';
 }
 const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
 
