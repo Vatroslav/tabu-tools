@@ -399,11 +399,12 @@ const I18N = {
   }
 };
 
-// Language: ?lang=hr|en, else browser language (Croatian -> HR, anything else -> EN)
+// Language: ?lang=hr|en, else browser language (Croatian, Serbian, Bosnian, Montenegrin -> HR, anything else -> EN)
 function initialLang(){
   const p = new URLSearchParams(location.search).get('lang');
   if(p==='hr' || p==='en') return p;
-  return (navigator.language||'').toLowerCase().startsWith('hr') ? 'hr' : 'en';
+  const b = (navigator.language||'').toLowerCase().split('-')[0];
+  return ['hr','sr','bs','sh','cnr'].includes(b) ? 'hr' : 'en';
 }
 const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
 
