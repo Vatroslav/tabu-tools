@@ -2,12 +2,207 @@
 <html lang="hr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tabu kalkulatori</title>
-<link rel="canonical" href="https://kalkulator.tabu.hr/turnover/">
-<meta http-equiv="refresh" content="0; url=/turnover/">
-<script>location.replace('/turnover/' + location.search + location.hash);</script>
+<meta name="description" content="Besplatni alati Tabua za HR i poslodavce: kalkulator plaće bruto-neto i kalkulator troška odlaska zaposlenika.">
+<link rel="canonical" href="https://kalkulator.tabu.hr/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tabu">
+<meta property="og:url" content="https://kalkulator.tabu.hr/">
+<meta property="og:title" content="Tabu kalkulatori">
+<meta property="og:description" content="Besplatni alati Tabua za HR i poslodavce.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
+<link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
+<script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Brand accents */
+    --lavender:#BCB2F7;
+    --lime:#E0FE90;
+    --salmon:#FF9883;
+    --ink:#15131F;
+    /* Background - cool near-black ramp */
+    --bg:#121216;
+    --surface:#17171C;
+    --surface-2:#26262E;
+    /* Borders */
+    --border:#2E2E38;
+    --border-subtle:#1E1E25;
+    /* Text */
+    --text:#ECECF0;
+    --muted:#8A8A96;
+    --text-subtle:#6C6C78;
+    /* Semantic (status) */
+    --success:#54CE88;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Geist',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 36px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* Header */
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:26px 0 10px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .logo{
+    display:inline-flex;align-items:center;
+    color:var(--text);text-decoration:none;transition:.15s;
+  }
+  .brand .logo:hover{color:var(--lavender)}
+  .logo-svg{height:23px;width:auto;display:block}
+  .lang-toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px}
+  .lang-toggle button{
+    font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    border:0;background:transparent;color:var(--muted);
+    padding:6px 14px;border-radius:999px;transition:.15s;
+  }
+  .lang-toggle button.active{background:var(--lavender);color:var(--ink)}
+
+  /* Hero */
+  .hero{padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:18px}
+  .hero h1{font-size:25px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+  .hero p{color:var(--muted);margin-top:7px;font-size:14.5px;text-wrap:pretty}
+
+  
+  .tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:6px}
+  .tool{
+    display:block;text-decoration:none;color:var(--text);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px 18px 16px;transition:.15s;
+  }
+  .tool:hover{border-color:var(--lavender);background:var(--surface-2)}
+  .tool h2{font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .tool p{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.45}
+  .tool .go{display:inline-block;margin-top:12px;color:var(--lavender);font-size:13.5px;font-weight:600}
+
+  footer{
+    margin-top:26px;padding-top:18px;border-top:1px solid var(--border);
+    color:var(--muted);font-size:13px;line-height:1.7;
+  }
+</style>
 </head>
 <body>
-<p><a href="/turnover/">Kalkulator troška odlaska zaposlenika</a></p>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <a class="logo" href="https://www.tabu.hr" target="_blank" rel="noopener" aria-label="Tabu">
+        <svg class="logo-svg" viewBox="0 0 3277 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tabu">
+          <path d="M289.493 165.865L4.84394e-05 165.865L6.29397e-05 0L780.314 6.82172e-05L780.314 165.865L490.822 165.865L490.822 701.634L289.493 701.634L289.493 165.865Z" fill="currentColor"/>
+          <path d="M903.392 455.47L1290.26 455.47L1290.26 605.538L903.392 605.538L903.392 455.47ZM1544.22 701.634L1311.31 701.634L1096.83 210.622L882.338 701.634L649.428 701.634L978.397 2.87594e-05L1215.25 4.94661e-05L1544.22 701.634Z" fill="currentColor"/>
+          <path d="M1598.04 0L2137.55 4.71654e-05C2184.92 5.13067e-05 2224.4 6.58195 2258.61 21.0622C2292.82 35.5425 2319.14 56.6047 2337.56 84.2488C2355.98 110.576 2365.2 142.17 2365.2 179.029C2365.2 214.571 2353.35 246.164 2330.98 271.176C2307.3 297.503 2274.4 314.616 2233.61 323.831C2292.82 326.464 2338.88 343.577 2371.78 376.487C2405.99 409.396 2423.09 454.153 2423.09 508.125C2423.09 548.933 2412.57 583.159 2391.51 612.12C2370.46 641.08 2340.19 663.459 2299.4 677.939C2259.93 693.736 2213.87 701.634 2159.92 701.634L1598.04 701.634L1598.04 0ZM2141.5 534.453C2166.5 534.453 2186.24 529.187 2199.4 518.656C2213.87 506.809 2220.45 492.329 2220.45 473.899C2220.45 454.153 2213.87 439.673 2199.4 429.142C2186.24 417.294 2166.5 412.029 2141.5 412.029L1799.37 412.029L1799.37 534.453L2141.5 534.453ZM2094.13 263.277C2115.18 263.277 2132.29 258.012 2145.44 248.797C2157.29 239.582 2163.87 226.418 2163.87 210.622C2163.87 196.142 2157.29 185.611 2145.44 177.712C2132.29 169.814 2115.18 165.865 2094.13 165.865L1799.37 165.865L1799.37 263.277L2094.13 263.277Z" fill="currentColor"/>
+          <path d="M2873.8 719.947C2790.9 719.947 2719.85 706.783 2658 677.822C2597.47 650.178 2551.41 610.687 2518.52 558.031C2485.62 505.376 2469.83 456.785 2469.83 385.701L2469.83 0L2671.16 1.76007e-05L2671.16 322.838C2671.16 387.341 2689.58 437.363 2725.11 474.222C2761.95 509.764 2810.64 528.194 2873.8 528.194C2935.65 528.194 2985.65 509.764 3021.18 474.222C3056.71 437.363 3075.13 387.341 3075.13 322.838L3075.13 5.29172e-05L3276.46 7.05179e-05L3276.46 385.701C3276.46 456.786 3260.67 505.376 3227.77 558.031C3196.19 610.687 3148.82 650.178 3088.29 677.822C3027.76 706.783 2955.39 719.947 2873.8 719.947Z" fill="currentColor"/>
+        </svg>
+      </a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button id="lang-hr" data-lang="hr" class="active">HR</button>
+      <button id="lang-en" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1 data-i18n="title">Tabu kalkulatori</h1>
+    <p data-i18n="subtitle">Besplatni alati Tabua za HR i poslodavce.</p>
+  </div>
+
+  <div class="tools">
+    <a class="tool" data-href="/placa/" href="/placa/">
+      <h2 data-i18n="placa_title">Kalkulator plaće</h2>
+      <p data-i18n="placa_desc">Bruto u neto, neto u bruto i trošak poslodavca za Hrvatsku, Srbiju i Bosnu i Hercegovinu, s poreznim olakšicama.</p>
+      <span class="go" data-i18n="open">Otvori →</span>
+    </a>
+    <a class="tool" data-href="/turnover/" href="/turnover/">
+      <h2 data-i18n="turnover_title">Kalkulator troška odlaska zaposlenika</h2>
+      <p data-i18n="turnover_desc">Procijeni stvarni trošak odlaska zaposlenika - prazna pozicija, zapošljavanje, onboarding i ostalo.</p>
+      <span class="go" data-i18n="open">Otvori →</span>
+    </a>
+  </div>
+
+  <footer>
+    <div data-i18n="footer_author">Izradio Vatroslav Mileusnić, suosnivač Tabua.</div>
+    <div data-i18n="footer_contact">Pitanja ili povratne informacije? Piši mi na vatroslav@tabu.hr</div>
+  </footer>
+</div>
+
+<script>
+const I18N = {
+  hr: {
+    doc_title: 'Tabu kalkulatori',
+    title: 'Tabu kalkulatori',
+    subtitle: 'Besplatni alati Tabua za HR i poslodavce.',
+    placa_title: 'Kalkulator plaće',
+    placa_desc: 'Bruto u neto, neto u bruto i trošak poslodavca za Hrvatsku, Srbiju i Bosnu i Hercegovinu, s poreznim olakšicama.',
+    turnover_title: 'Kalkulator troška odlaska zaposlenika',
+    turnover_desc: 'Procijeni stvarni trošak odlaska zaposlenika - prazna pozicija, zapošljavanje, onboarding i ostalo.',
+    open: 'Otvori →',
+    footer_author: 'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
+    footer_contact: 'Pitanja ili povratne informacije? Piši mi na vatroslav@tabu.hr',
+  },
+  en: {
+    doc_title: 'Tabu calculators',
+    title: 'Tabu calculators',
+    subtitle: 'Free Tabu tools for HR and employers.',
+    placa_title: 'Salary calculator',
+    placa_desc: 'Gross to net, net to gross and employer cost for Croatia, Serbia and Bosnia and Herzegovina, including tax reliefs.',
+    turnover_title: 'Employee Turnover Cost Calculator',
+    turnover_desc: 'Estimate the true cost of an employee leaving - the vacancy, hiring, onboarding and more.',
+    open: 'Open →',
+    footer_author: 'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
+    footer_contact: 'Questions or feedback? Reach me at vatroslav@tabu.hr',
+  },
+};
+
+// Language: ?lang=hr|en, else browser language (Croatian, Serbian, Bosnian -> HR; Montenegro and anything else -> EN)
+function initialLang(){
+  const p = new URLSearchParams(location.search).get('lang');
+  if(p==='hr' || p==='en') return p;
+  const parts = (navigator.language||'').toLowerCase().split('-');
+  return ['hr','sr','bs','sh'].includes(parts[0]) && !parts.includes('me') ? 'hr' : 'en';
+}
+let lang = initialLang();
+
+function applyLang(){
+  const t = I18N[lang];
+  document.documentElement.lang = lang;
+  document.title = t.doc_title;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t[el.dataset.i18n]; });
+  // Links keep the chosen language only when it was picked explicitly
+  const explicit = new URLSearchParams(location.search).get('lang');
+  document.querySelectorAll('.tool').forEach(a => {
+    a.href = a.dataset.href + (explicit ? '?lang=' + explicit : '');
+  });
+  document.getElementById('lang-en').classList.toggle('active', lang==='en');
+  document.getElementById('lang-hr').classList.toggle('active', lang==='hr');
+}
+
+document.querySelectorAll('.lang-toggle button').forEach(b => {
+  b.addEventListener('click', () => {
+    lang = b.dataset.lang;
+    const u = new URL(location.href); u.searchParams.set('lang', lang);
+    history.replaceState(null, '', u);
+    applyLang();
+  });
+});
+
+applyLang();
+</script>
 </body>
 </html>
