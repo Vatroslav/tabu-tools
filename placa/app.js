@@ -23,7 +23,7 @@ const RERENDER_ON = new Set(['residence', 'employerIncentive']);
 
 const FIELDS = {
   HR: [
-    select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, hint: 'rates' }),
+    select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, span2: true, hint: 'rates' }),
     int('children', 'basic', 0, 0, 9),
     int('dependents', 'basic', 0, 0, 20),
     check('assistedArea', 'person', false, { showIf: (s) => HR_ASSISTED_AREA_CODES.has(Number(s.residence)) }),
@@ -451,7 +451,8 @@ function fieldRow(f, s) {
     if (u) hint = t('rates_hint').replace('{lower}', fmtRate(u[2])).replace('{higher}', fmtRate(u[3]));
   }
   const label = el('label', { for: `f-${f.id}` }, t(labelKey), sub || hint ? el('span', { class: 'sub' }, sub || hint) : null);
-  return el('div', { class: `field${f.wide ? ' wide' : ''}${f.type === 'check' ? ' check' : ''}` }, label, fieldControl(f, s));
+  const cls = `field${f.wide ? ' wide' : ''}${f.span2 ? ' span2' : ''}${f.type === 'check' ? ' check' : ''}`;
+  return el('div', { class: cls }, label, fieldControl(f, s));
 }
 
 function fmtRate(bp) {
