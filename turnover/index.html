@@ -399,11 +399,11 @@ const I18N = {
   }
 };
 
-// Language: ?lang=hr|en, default HR
+// Language: ?lang=hr|en, else browser language (English -> EN), default HR
 function initialLang(){
   const p = new URLSearchParams(location.search).get('lang');
   if(p==='hr' || p==='en') return p;
-  return 'hr';
+  return (navigator.language||'').toLowerCase().startsWith('en') ? 'en' : 'hr';
 }
 const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
 
