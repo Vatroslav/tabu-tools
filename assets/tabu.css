@@ -168,7 +168,7 @@ button{cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--primary);color:var(--ink);font-weight:600}
 .seg-scroll{overflow-x:auto;margin:0 -16px;padding:0 16px;scrollbar-width:none}
 .seg-scroll::-webkit-scrollbar{display:none}
-.seg-scroll .seg{width:max-content}
+.seg-scroll .seg{width:max-content;max-width:none}
 
 /* Buttons */
 .btn{
