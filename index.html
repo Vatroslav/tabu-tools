@@ -14,7 +14,6 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
 <link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
-<!-- Plausible: isti site kao tabu.hr (cookieless); kalkulator se u dashboardu filtrira po hostnameu -->
 <script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
 <script>
   window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
@@ -25,7 +24,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Brand accenti (identitet/naglasci - NE status) */
+    /* Brand accents */
     --lavender:#BCB2F7;
     --lime:#E0FE90;
     --salmon:#FF9883;
@@ -41,7 +40,7 @@
     --text:#ECECF0;
     --muted:#8A8A96;
     --text-subtle:#6C6C78;
-    /* Semantic (status - NE brand) */
+    /* Semantic (status) */
     --success:#54CE88;
     --radius:16px;
   }
@@ -400,13 +399,12 @@ const I18N = {
   }
 };
 
-// Jezik: ?lang=hr|en (link iz posta), inače jezik preglednika; fallback EN
+// Language: ?lang=hr|en, else browser language, fallback EN
 function initialLang(){
   const p = new URLSearchParams(location.search).get('lang');
   if(p==='hr' || p==='en') return p;
   return (navigator.language||'').toLowerCase().startsWith('hr') ? 'hr' : 'en';
 }
-// UTM na CTA-u: Plausible na tabu.hr vidi dolazak iz kalkulatora kao izvor
 const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
 
 let lang = initialLang();
