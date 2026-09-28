@@ -154,3 +154,13 @@ test('net to gross returns the smallest matching gross', () => {
   const b = netToGrossHR({ rates: ZAGREB }, eur(9145.63));
   assert.equal(b.gross, eur(15000));
 });
+
+test('local unit table: 556 units, all assisted-area codes present', async () => {
+  const { HR_LOCAL_UNITS } = await import('../engine/data-hr-local-units.js');
+  const { HR_ASSISTED_AREA_CODES } = await import('../engine/params-hr.js');
+  assert.equal(HR_LOCAL_UNITS.length, 556);
+  const codes = new Set(HR_LOCAL_UNITS.map((u) => u[0]));
+  for (const c of HR_ASSISTED_AREA_CODES) assert.ok(codes.has(c), `missing ${c}`);
+  const zagreb = HR_LOCAL_UNITS.find((u) => u[0] === 1333);
+  assert.deepEqual(zagreb.slice(2), [2300, 3300]);
+});
