@@ -14,6 +14,7 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
 <link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
+<script>(function(){var t;try{t=localStorage.getItem('tabu-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script>
 <script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
 <script>
   window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
@@ -21,228 +22,140 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/tabu.css">
 <style>
-  :root{
-    /* Brand accents */
-    --lavender:#BCB2F7;
-    --lime:#E0FE90;
-    --salmon:#FF9883;
-    --ink:#15131F;
-    /* Background - cool near-black ramp */
-    --bg:#121216;
-    --surface:#17171C;
-    --surface-2:#26262E;
-    /* Borders */
-    --border:#2E2E38;
-    --border-subtle:#1E1E25;
-    /* Text */
-    --text:#ECECF0;
-    --muted:#8A8A96;
-    --text-subtle:#6C6C78;
-    /* Semantic (status) */
-    --success:#54CE88;
-    --radius:16px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:'Geist',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-    padding:0 0 36px;
-  }
-  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .workbench__inputs{gap:12px}
+  .workbench__aside{flex-basis:340px;max-width:420px}
+  .card--group{padding:clamp(18px,2vw,22px) clamp(16px,2.4vw,28px) 10px}
+  .group-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+  .group-head__text{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .group-head p{font-size:14px;line-height:1.45;color:var(--text-muted)}
+  .group-head p:empty{display:none}
+  .group-sum{flex:none;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text-secondary)}
+  .fields{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));margin-top:10px}
+  .field{padding:11px 0}
+  .num{width:118px}
 
-  /* Header */
-  header{
-    display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:26px 0 10px;flex-wrap:wrap;
-  }
-  .brand{display:flex;align-items:center;gap:11px}
-  .brand .logo{
-    display:inline-flex;align-items:center;
-    color:var(--text);text-decoration:none;transition:.15s;
-  }
-  .brand .logo:hover{color:var(--lavender)}
-  .logo-svg{height:23px;width:auto;display:block}
-  .lang-toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px}
-  .lang-toggle button{
-    font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
-    border:0;background:transparent;color:var(--muted);
-    padding:6px 14px;border-radius:999px;transition:.15s;
-  }
-  .lang-toggle button.active{background:var(--lavender);color:var(--ink)}
+  .tile{gap:18px}
+  .tile__value{font-size:clamp(44px,5vw,60px)}
+  .mini--row{flex-direction:row;justify-content:space-between;align-items:baseline;gap:12px}
+  .mini--row .mini__label{font-size:14px}
+  .mini--row .mini__value{flex:none}
 
-  /* Hero */
-  .hero{padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:18px}
-  .hero h1{font-size:25px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
-  .hero p{color:var(--muted);margin-top:7px;font-size:14.5px;text-wrap:pretty}
-
-  /* Layout */
-  .grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
-
-  /* Input cards */
-  .card{
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:11px 14px 4px;margin-bottom:10px;
-  }
-  .card h2{
-    font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
-    color:var(--lavender);margin-bottom:2px;
-  }
-  .card .hint{font-size:12.5px;color:var(--muted);margin-bottom:5px;line-height:1.35}
-
-  /* Two-column dense field grid (Sheet-like density) */
-  .fields{display:grid;grid-template-columns:1fr 1fr;column-gap:26px}
-  .field{display:grid;grid-template-columns:1fr 104px;gap:12px;align-items:center;
-    padding:5px 0;border-top:1px solid var(--border-subtle)}
-  /* hide the divider on the first row of each column */
-  .fields .field:nth-child(1),.fields .field:nth-child(2){border-top:0}
-  .field label{font-size:13.5px;color:var(--text);line-height:1.3}
-  .field .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-
-  .input-shell{position:relative;display:flex;align-items:center}
-  .input-shell .affix{
-    position:absolute;right:12px;font-size:13px;color:var(--muted);
-    font-family:'Geist Mono',monospace;pointer-events:none;
-  }
-  .input-shell.left .affix{left:12px;right:auto}
-  input[type=number]{
-    width:100%;font-family:'Geist Mono',monospace;font-size:14px;font-weight:500;
-    background:var(--surface-2);border:1px solid var(--border);color:var(--text);
-    border-radius:8px;padding:7px 11px;text-align:right;transition:.15s;
-    -moz-appearance:textfield;
-  }
-  input[type=number]::-webkit-outer-spin-button,
-  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-  input[type=number].affixed{padding-right:30px}
-  input[type=number].affixed-left{padding-left:26px;text-align:right}
-  input[type=number]:focus{outline:none;border-color:var(--lavender);box-shadow:0 0 0 3px rgba(188,178,247,0.22)}
-  input[type=number]::placeholder{color:var(--text-subtle)}
-
-  /* Results */
-  .results{position:sticky;top:16px}
-  .results-card{
-    background:linear-gradient(165deg,#1E1E25,#17171C);
-    border:1px solid var(--border);border-radius:var(--radius);padding:18px 18px;
-  }
-  .res-block{padding:7px 0}
-  .res-block + .res-block{border-top:1px solid var(--border)}
-  .res-label{font-size:12.5px;color:var(--muted);margin-bottom:3px}
-  .res-value{font-family:'Geist Mono',monospace;font-weight:600;letter-spacing:-.01em}
-  .res-primary .res-value{font-size:31px;color:var(--lavender)}
-  .res-primary .res-label{font-size:13px;color:var(--text);font-weight:500}
-  .res-secondary .res-value{font-size:18px;color:var(--text)}
-  .res-sub .res-value{font-size:15px;color:var(--lavender)}
-  .res-divider{height:1px;background:var(--border);margin:6px 0}
-  .res-section-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 0 0}
-
+  .results-card{padding:24px;display:flex;flex-direction:column;gap:20px}
+  .split__item{font-size:14px}
+  .split__item .v{font-weight:600}
+  .breakdown{display:flex;flex-direction:column}
+  .breakdown .group-label{padding-bottom:6px}
+  .breakdown .row{padding:6px 0}
   .cta{
-    display:block;text-align:center;margin-top:14px;
-    background:var(--lavender);color:var(--ink);font-weight:600;font-size:14.5px;
-    text-decoration:none;padding:13px;border-radius:12px;transition:.15s;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;
+    padding:16px 18px;border-radius:12px;background:var(--inv-bg);color:var(--inv-fg);
+    text-decoration:none;font-size:15px;font-weight:600;line-height:1.35;transition:opacity .15s;
   }
-  .cta:hover{filter:brightness(1.06)}
-  .reset{
-    display:block;width:100%;margin-top:10px;cursor:pointer;
-    background:transparent;border:1px solid var(--border);color:var(--muted);
-    font-family:inherit;font-size:13px;font-weight:500;padding:10px;border-radius:12px;transition:.15s;
-  }
-  .reset:hover{border-color:var(--muted);color:var(--text)}
+  .cta:hover{opacity:.9}
+  .mobile-bar__value{font-size:28px}
 
-  footer{
-    margin-top:26px;padding-top:18px;border-top:1px solid var(--border);
-    color:var(--muted);font-size:13px;line-height:1.7;
-  }
-  footer a{color:var(--lavender);text-decoration:none}
-  footer a:hover{text-decoration:underline}
-
-  @media(max-width:980px){
-    .fields{grid-template-columns:1fr}
-    .fields .field:nth-child(2){border-top:1px solid var(--border-subtle)}
-  }
-  @media(max-width:860px){
-    .grid{grid-template-columns:1fr}
-    .results{position:static}
-    .hero h1{font-size:23px}
-    .field{grid-template-columns:1fr 116px}
+  @media (max-width:1010px){
+    .page{padding-bottom:120px}
+    .workbench__inputs,.workbench__aside{flex-basis:100%;max-width:none}
+    .workbench__aside{position:static}
+    .mobile-bar{display:flex}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <a class="logo" href="https://www.tabu.hr" target="_blank" rel="noopener" aria-label="Tabu">
-        <svg class="logo-svg" viewBox="0 0 3277 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tabu">
+<div class="page">
+  <header class="site-header">
+    <div class="site-header__left">
+      <a class="logo" href="https://www.tabu.hr" aria-label="Tabu">
+        <svg viewBox="0 0 3277 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tabu">
           <path d="M289.493 165.865L4.84394e-05 165.865L6.29397e-05 0L780.314 6.82172e-05L780.314 165.865L490.822 165.865L490.822 701.634L289.493 701.634L289.493 165.865Z" fill="currentColor"/>
           <path d="M903.392 455.47L1290.26 455.47L1290.26 605.538L903.392 605.538L903.392 455.47ZM1544.22 701.634L1311.31 701.634L1096.83 210.622L882.338 701.634L649.428 701.634L978.397 2.87594e-05L1215.25 4.94661e-05L1544.22 701.634Z" fill="currentColor"/>
           <path d="M1598.04 0L2137.55 4.71654e-05C2184.92 5.13067e-05 2224.4 6.58195 2258.61 21.0622C2292.82 35.5425 2319.14 56.6047 2337.56 84.2488C2355.98 110.576 2365.2 142.17 2365.2 179.029C2365.2 214.571 2353.35 246.164 2330.98 271.176C2307.3 297.503 2274.4 314.616 2233.61 323.831C2292.82 326.464 2338.88 343.577 2371.78 376.487C2405.99 409.396 2423.09 454.153 2423.09 508.125C2423.09 548.933 2412.57 583.159 2391.51 612.12C2370.46 641.08 2340.19 663.459 2299.4 677.939C2259.93 693.736 2213.87 701.634 2159.92 701.634L1598.04 701.634L1598.04 0ZM2141.5 534.453C2166.5 534.453 2186.24 529.187 2199.4 518.656C2213.87 506.809 2220.45 492.329 2220.45 473.899C2220.45 454.153 2213.87 439.673 2199.4 429.142C2186.24 417.294 2166.5 412.029 2141.5 412.029L1799.37 412.029L1799.37 534.453L2141.5 534.453ZM2094.13 263.277C2115.18 263.277 2132.29 258.012 2145.44 248.797C2157.29 239.582 2163.87 226.418 2163.87 210.622C2163.87 196.142 2157.29 185.611 2145.44 177.712C2132.29 169.814 2115.18 165.865 2094.13 165.865L1799.37 165.865L1799.37 263.277L2094.13 263.277Z" fill="currentColor"/>
           <path d="M2873.8 719.947C2790.9 719.947 2719.85 706.783 2658 677.822C2597.47 650.178 2551.41 610.687 2518.52 558.031C2485.62 505.376 2469.83 456.785 2469.83 385.701L2469.83 0L2671.16 1.76007e-05L2671.16 322.838C2671.16 387.341 2689.58 437.363 2725.11 474.222C2761.95 509.764 2810.64 528.194 2873.8 528.194C2935.65 528.194 2985.65 509.764 3021.18 474.222C3056.71 437.363 3075.13 387.341 3075.13 322.838L3075.13 5.29172e-05L3276.46 7.05179e-05L3276.46 385.701C3276.46 456.786 3260.67 505.376 3227.77 558.031C3196.19 610.687 3148.82 650.178 3088.29 677.822C3027.76 706.783 2955.39 719.947 2873.8 719.947Z" fill="currentColor"/>
         </svg>
       </a>
+      <a class="back" href="https://kalkulator.tabu.hr/" data-i18n="back"></a>
     </div>
-    <div class="lang-toggle" role="group" aria-label="Language">
-      <button id="lang-hr" data-lang="hr" class="active">HR</button>
-      <button id="lang-en" data-lang="en">EN</button>
+    <div class="site-header__right">
+      <button class="theme-toggle" type="button">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button id="lang-hr" type="button" data-lang="hr" aria-pressed="true">HR</button>
+        <button id="lang-en" type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
     </div>
   </header>
 
-  <div class="hero">
+  <div class="intro">
     <h1 data-i18n="title"></h1>
     <p data-i18n="subtitle"></p>
   </div>
 
-  <div class="grid">
-    <!-- INPUTS -->
-    <div class="inputs" id="inputs"></div>
+  <div class="workbench">
+    <div class="workbench__inputs" id="inputs"></div>
 
-    <!-- RESULTS -->
-    <div class="results">
-      <div class="results-card">
-        <div class="res-block res-primary">
-          <div class="res-label" data-i18n="r_total"></div>
-          <div class="res-value" id="out-total">—</div>
+    <aside class="workbench__aside" id="razrada">
+      <div class="tile">
+        <div class="tile__main">
+          <span class="tile__label" data-i18n="r_total"></span>
+          <span class="tile__value" id="out-total">—</span>
         </div>
-        <div class="res-block res-secondary">
-          <div class="res-label" data-i18n="r_total_chance"></div>
-          <div class="res-value" id="out-total-chance">—</div>
+        <div class="mini mini--row">
+          <span class="mini__label" data-i18n="r_total_chance"></span>
+          <span class="mini__value" id="out-total-chance">—</span>
         </div>
-
-        <div class="res-section-title" data-i18n="r_hiring_breakdown"></div>
-        <div class="res-block res-sub">
-          <div class="res-label" data-i18n="r_hiring_new"></div>
-          <div class="res-value" id="out-hiring-new">—</div>
-        </div>
-        <div class="res-block res-sub">
-          <div class="res-label" data-i18n="r_onboarding_salary"></div>
-          <div class="res-value" id="out-onboarding">—</div>
-        </div>
-        <div class="res-block res-secondary">
-          <div class="res-label" data-i18n="r_hiring_total"></div>
-          <div class="res-value" id="out-hiring-total">—</div>
-        </div>
-        <div class="res-block res-sub">
-          <div class="res-label" data-i18n="r_hiring_chance"></div>
-          <div class="res-value" id="out-hiring-chance">—</div>
-        </div>
-
-        <a class="cta" id="cta" href="https://www.tabu.hr/en/poslovni" target="_blank" rel="noopener" data-i18n="cta"></a>
-        <button class="reset" id="reset" type="button" data-i18n="reset"></button>
       </div>
-    </div>
+      <div class="card results-card">
+        <div class="split">
+          <span class="split__title" id="split-title"></span>
+          <div class="split__bar" aria-hidden="true">
+            <span id="bar-vacancy" style="background:var(--primary)"></span>
+            <span id="bar-spent" style="background:var(--salmon)"></span>
+            <span id="bar-hire" style="background:var(--lime)"></span>
+          </div>
+          <div class="split__legend split__legend--stack">
+            <span class="split__item"><i style="background:var(--primary)"></i><span data-i18n="p_vacancy"></span><span class="v" id="out-vacancy">—</span></span>
+            <span class="split__item"><i style="background:var(--salmon)"></i><span data-i18n="p_spent"></span><span class="v" id="out-spent">—</span></span>
+            <span class="split__item"><i style="background:var(--lime)"></i><span data-i18n="p_hire"></span><span class="v" id="out-hire">—</span></span>
+          </div>
+        </div>
+        <div class="breakdown">
+          <span class="group-label" data-i18n="r_hiring_breakdown"></span>
+          <div class="row"><span data-i18n="r_hiring_new"></span><span class="v" id="out-hiring-new">—</span></div>
+          <div class="row"><span data-i18n="r_onboarding_salary"></span><span class="v" id="out-onboarding">—</span></div>
+          <div class="row total"><span data-i18n="r_hiring_total"></span><span class="v" id="out-hiring-total">—</span></div>
+          <div class="row"><span data-i18n="r_hiring_chance"></span><span class="v" id="out-hiring-chance">—</span></div>
+        </div>
+        <a class="cta" id="cta" href="https://www.tabu.hr/poslovni" target="_blank" rel="noopener"><span data-i18n="cta"></span><span aria-hidden="true">→</span></a>
+        <button class="btn btn-ghost" id="reset" type="button" data-i18n="reset"></button>
+      </div>
+    </aside>
   </div>
 
-  <footer>
-    <div><a href="https://docs.google.com/spreadsheets/d/1gmp7K2Ylekqr7nEIo-SYdDUULPaWb4jVhRnz-K2i9W4/edit" target="_blank" rel="noopener" data-i18n="footer_sheet"></a></div>
-    <div data-i18n="footer_author"></div>
-    <div data-i18n="footer_contact"></div>
+  <footer class="site-footer">
+    <div class="site-footer__left">
+      <a href="https://docs.google.com/spreadsheets/d/1gmp7K2Ylekqr7nEIo-SYdDUULPaWb4jVhRnz-K2i9W4/edit" target="_blank" rel="noopener" data-i18n="footer_sheet"></a>
+      <span data-i18n="footer_author"></span>
+    </div>
+    <span><span data-i18n="footer_contact"></span> <a href="mailto:vatroslav@tabu.hr">vatroslav@tabu.hr</a></span>
   </footer>
 </div>
 
+<div class="mobile-bar">
+  <div class="mobile-bar__text">
+    <span class="mobile-bar__label" data-i18n="r_total"></span>
+    <span class="mobile-bar__value" id="mb-total">—</span>
+    <span class="mobile-bar__sub"><span data-i18n="r_total_chance"></span> <span id="mb-total-chance">—</span></span>
+  </div>
+  <a href="#razrada" data-i18n="details"></a>
+</div>
+
+<script src="/assets/theme.js"></script>
 <script>
 /* ============================================================
    Model — extracted 1:1 from the original Google Sheet.
@@ -296,6 +209,8 @@ const I18N = {
   en:{
     doc_title:'Employee Turnover Cost Calculator | Tabu',
     cta_url:'https://www.tabu.hr/en/poslovni',
+    back:'← All calculators',
+    details:'Breakdown ↓',
     title:'Employee Turnover Cost Calculator',
     subtitle:'Losing an employee costs far more than a final paycheck. Enter your numbers below - or keep the defaults - to estimate the true cost of replacing someone.',
     g_general:'General', g_general_h:'',
@@ -334,20 +249,26 @@ const I18N = {
     unit_mo:'mo',
     r_total:'Total cost of turnover',
     r_total_chance:'Adjusted for the chance of an early departure',
+    split_title:'What makes up {total}',
+    p_vacancy:'Vacant position',
+    p_spent:'Already invested in the departing employee',
+    p_hire:'Hiring a replacement',
     r_hiring_breakdown:'Hiring breakdown',
     r_hiring_new:'Cost of hiring a new employee',
     r_onboarding_salary:'Salary during onboarding',
     r_hiring_total:'Total cost of hiring',
     r_hiring_chance:'Hiring cost adjusted for early departure',
-    cta:'See how Tabu helps your business →',
+    cta:'See how Tabu helps your business',
     reset:'Reset to defaults',
     footer_sheet:'Prefer a spreadsheet? Open the Google Sheets version →',
     footer_author:'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
-    footer_contact:'Questions or feedback? Reach me at vatroslav@tabu.hr',
+    footer_contact:'Questions or feedback? Reach me at',
   },
   hr:{
     doc_title:'Kalkulator troška odlaska zaposlenika | Tabu',
     cta_url:'https://www.tabu.hr/poslovni',
+    back:'← Svi kalkulatori',
+    details:'Razrada ↓',
     title:'Kalkulator troška odlaska zaposlenika',
     subtitle:'Gubitak zaposlenika košta puno više od zadnje plaće. Unesi svoje brojke - ili ostavi zadane - da procijeniš stvarni trošak zamjene osobe.',
     g_general:'Općenito', g_general_h:'',
@@ -386,16 +307,20 @@ const I18N = {
     unit_mo:'mj',
     r_total:'Ukupni trošak odlaska',
     r_total_chance:'Uvećan za šansu ranog odlaska',
+    split_title:'Od čega se sastoji {total}',
+    p_vacancy:'Prazna pozicija',
+    p_spent:'Već uloženo u osobu koja odlazi',
+    p_hire:'Zapošljavanje zamjene',
     r_hiring_breakdown:'Razrada zapošljavanja',
     r_hiring_new:'Trošak zapošljavanja novog zaposlenika',
     r_onboarding_salary:'Plaća tijekom onboardinga',
     r_hiring_total:'Ukupni trošak zapošljavanja',
     r_hiring_chance:'Trošak zapošljavanja uvećan za rani odlazak',
-    cta:'Pogledaj kako Tabu pomaže tvojem poslovanju →',
+    cta:'Pogledaj kako Tabu pomaže tvojem poslovanju',
     reset:'Vrati na zadane vrijednosti',
     footer_sheet:'Više voliš tablicu? Otvori Google Sheets verziju →',
     footer_author:'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
-    footer_contact:'Pitanja ili povratne informacije? Piši mi na vatroslav@tabu.hr',
+    footer_contact:'Pitanja ili povratne informacije? Piši mi na',
   }
 };
 
@@ -411,36 +336,43 @@ const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
 let lang = initialLang();
 let touched = new Set();   // linked-default fields the user has manually overridden
 
-/* Build the input DOM */
+/* Build the input DOM: one card per group, fields as label + number input rows */
 function buildInputs(){
   const root = document.getElementById('inputs');
   root.innerHTML = '';
   touched = new Set();
-  let card = null, fieldsWrap = null;
+  let fieldsWrap = null;
   for(const f of FIELDS){
     if(f.group){
-      card = document.createElement('div');
-      card.className = 'card';
+      const card = document.createElement('div');
+      card.className = 'card card--group';
+      const head = document.createElement('div'); head.className = 'group-head';
+      const text = document.createElement('div'); text.className = 'group-head__text';
       const h2 = document.createElement('h2'); h2.dataset.i18n = 'g_'+f.group;
-      const hint = document.createElement('div'); hint.className='hint'; hint.dataset.i18n = 'g_'+f.group+'_h';
-      card.appendChild(h2); card.appendChild(hint);
+      const desc = document.createElement('p'); desc.dataset.i18n = 'g_'+f.group+'_h';
+      text.appendChild(h2); text.appendChild(desc);
+      const sum = document.createElement('span'); sum.className = 'group-sum'; sum.id = 'sum-'+f.group;
+      head.appendChild(text); head.appendChild(sum);
+      card.appendChild(head);
       fieldsWrap = document.createElement('div'); fieldsWrap.className = 'fields';
       card.appendChild(fieldsWrap);
       root.appendChild(card);
       continue;
     }
     const row = document.createElement('div'); row.className='field';
-    const lab = document.createElement('label'); lab.setAttribute('for', f.id); lab.dataset.i18n = f.id;
-    const shell = document.createElement('div'); shell.className='input-shell';
+    const lab = document.createElement('label'); lab.setAttribute('for', f.id);
+    const labText = document.createElement('span'); labText.dataset.i18n = f.id;
+    lab.appendChild(labText);
+    const shell = document.createElement('span'); shell.className='num';
     const inp = document.createElement('input');
     inp.type='number'; inp.id=f.id; inp.min='0'; inp.step='any'; inp.autocomplete='off';
-    const affix = document.createElement('span'); affix.className='affix';
-    if(f.affix==='eur'){ shell.classList.add('left'); affix.textContent='€'; inp.classList.add('affixed-left'); }
-    else if(f.affix==='pct'){ affix.textContent='%'; inp.classList.add('affixed'); }
-    else if(f.affix==='h'){ affix.textContent='h'; inp.classList.add('affixed'); }
-    else if(f.affix==='mo'){ affix.dataset.i18n='unit_mo'; inp.classList.add('affixed'); }
-    else if(f.affix==='x'){ affix.textContent='×'; inp.classList.add('affixed'); }
-    shell.appendChild(inp); shell.appendChild(affix);
+    const unit = document.createElement('span'); unit.className='unit';
+    if(f.affix==='eur') unit.textContent='€';
+    else if(f.affix==='pct') unit.textContent='%';
+    else if(f.affix==='h') unit.textContent='h';
+    else if(f.affix==='mo') unit.dataset.i18n='unit_mo';
+    else if(f.affix==='x') unit.textContent='×';
+    shell.appendChild(inp); shell.appendChild(unit);
     row.appendChild(lab); row.appendChild(shell);
     fieldsWrap.appendChild(row);
     // Prefill with the Sheet's default values; optional additive fields stay blank (=0).
@@ -511,14 +443,14 @@ function compute(){
   s.trainingHours       = if0('trainingHours',60);
   s.referralBonus       = add('referralBonus');
 
+  // Per-group parts of the hiring cost
+  const recruitment = hRec*(s.hoursReviewing + s.hoursInterviewing) + s.adminCost + s.advertisingCost;
+  const manager     = hMgr*s.managerHours;
+  const others      = hOth*s.numPeople*s.hoursPerPerson;
+  const training    = hTrn*s.trainingHours;
+
   // E6 — Cost of hiring a new employee
-  const E6 = hRec*(s.hoursReviewing + s.hoursInterviewing)
-           + s.adminCost + s.advertisingCost
-           + hMgr*s.managerHours
-           + hTrn*s.trainingHours
-           + s.relocationCost
-           + hOth*s.numPeople*s.hoursPerPerson
-           + s.referralBonus;
+  const E6 = recruitment + manager + training + s.relocationCost + others + s.referralBonus;
   s.E6 = E6;
 
   // E7 — Salary during onboarding (new hire)
@@ -529,34 +461,52 @@ function compute(){
   // Already spent on departing — linked default = E6 + salary*onboardingCompleted
   const alreadySpent = linked('alreadySpent', E6 + s.salaryDeparting*s.onboardingCompleted);
 
+  // Parts of the total: the vacancy, what was invested in the departing person, hiring a replacement
+  const vacancy = s.monthsVacant*s.coveringCost + s.opportunityCost + s.disgruntledCost;
+  const spent   = alreadySpent + s.salaryDeparting*s.onboardingCompleted;
+
   // E2 — Total cost of turnover
-  const E2 = s.monthsVacant*s.coveringCost
-           + s.opportunityCost
-           + s.disgruntledCost
-           + alreadySpent
-           + E6
-           + s.salaryDeparting*s.onboardingCompleted;
+  const E2 = vacancy + spent + E6;
 
   const E3 = E2 * (1 + s.earlyDepartureChance);   // total + chance
   const E9 = E8 * (1 + s.earlyDepartureChance);   // hiring + chance
 
   setOut('out-total', E2);
   setOut('out-total-chance', E3);
+  setOut('mb-total', E2);
+  setOut('mb-total-chance', E3);
   setOut('out-hiring-new', E6);
   setOut('out-onboarding', E7);
   setOut('out-hiring-total', E8);
   setOut('out-hiring-chance', E9);
+
+  document.getElementById('split-title').textContent = I18N[lang].split_title.replace('{total}', fmt(E2));
+  setOut('out-vacancy', vacancy);
+  setOut('out-spent', spent);
+  setOut('out-hire', E6);
+  setBar('bar-vacancy', vacancy);
+  setBar('bar-spent', spent);
+  setBar('bar-hire', E6);
+
+  // Group subtotals shown in the card headers; relocation counts where its field is
+  document.getElementById('sum-general').textContent = fmtNum(H) + ' h';
+  setOut('sum-departing', vacancy + spent + s.relocationCost);
+  setOut('sum-recruitment', recruitment);
+  setOut('sum-manager', manager);
+  setOut('sum-others', others);
+  setOut('sum-training', training);
+  setOut('sum-referral', s.referralBonus);
 }
 
+function fmtNum(n){
+  return new Intl.NumberFormat(lang==='hr' ? 'hr-HR' : 'en-US',{maximumFractionDigits:0}).format(Math.round(n));
+}
 function fmt(n){
   if(!isFinite(n)) n = 0;
-  const rounded = Math.round(n);
-  if(lang==='hr'){
-    return new Intl.NumberFormat('hr-HR',{maximumFractionDigits:0}).format(rounded) + ' €';
-  }
-  return '€' + new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(rounded);
+  return lang==='hr' ? fmtNum(n) + ' €' : '€' + fmtNum(n);
 }
 function setOut(id,val){ document.getElementById(id).textContent = fmt(val); }
+function setBar(id,val){ document.getElementById(id).style.flex = String(Math.max(0, isFinite(val) ? val : 0)); }
 
 function applyLang(){
   const t = I18N[lang];
@@ -565,14 +515,11 @@ function applyLang(){
   document.getElementById('cta').href = t.cta_url + '?' + CTA_UTM;
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key = el.dataset.i18n;
-    if(t[key]!==undefined){
-      el.textContent = t[key];
-      if(el.classList.contains('hint') && t[key]===''){ el.style.display='none'; }
-      else if(el.classList.contains('hint')){ el.style.display=''; }
-    }
+    if(t[key]!==undefined) el.textContent = t[key];
   });
-  document.getElementById('lang-en').classList.toggle('active', lang==='en');
-  document.getElementById('lang-hr').classList.toggle('active', lang==='hr');
+  document.getElementById('lang-en').setAttribute('aria-pressed', String(lang==='en'));
+  document.getElementById('lang-hr').setAttribute('aria-pressed', String(lang==='hr'));
+  window.tabuTheme.apply();
   compute();
 }
 

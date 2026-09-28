@@ -282,8 +282,16 @@ const HR = {
   not_modelled_BD: ['Poticaj od 5.000 ili 7.000 KM po novozaposlenom', 'Pomoć zbog rasta cijena za 2026.'],
   sources: SOURCES,
 
+  back: '← Svi kalkulatori',
+  details: 'Razrada ↓',
+  country_label: 'Država',
+  split_title: 'Kamo ide {total}',
+  s_pensionHR: 'Mirovinsko (I. + II. stup)',
+  s_employee: 'Doprinosi radnika',
+  s_employer: 'Doprinosi poslodavca',
+
   footer_author: 'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
-  footer_contact: 'Pitanja ili povratne informacije? Piši mi na vatroslav@tabu.hr',
+  footer_contact: 'Pitanja ili povratne informacije? Piši mi na',
 };
 
 const EN = {
@@ -528,8 +536,16 @@ const EN = {
   not_modelled_RSBIH: ['Special base for textile, clothing and leather', 'Seasonal work'],
   not_modelled_BD: ['Incentive of 5,000 or 7,000 KM per new hire', 'Cost-of-living aid for 2026'],
 
+  back: '← All calculators',
+  details: 'Breakdown ↓',
+  country_label: 'Country',
+  split_title: 'Where {total} goes',
+  s_pensionHR: 'Pension (pillars I and II)',
+  s_employee: 'Employee contributions',
+  s_employer: 'Employer contributions',
+
   footer_author: 'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
-  footer_contact: 'Questions or feedback? Reach me at vatroslav@tabu.hr',
+  footer_contact: 'Questions or feedback? Reach me at',
 };
 
 export const I18N = { hr: HR, en: EN };
