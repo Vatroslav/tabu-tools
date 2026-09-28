@@ -375,11 +375,20 @@ function syncUrl() {
 
 const $ = (id) => document.getElementById(id);
 const t = (key) => I18N[lang][key] ?? key;
+const locale = () => (lang === 'hr' ? 'hr-HR' : 'en-GB');
 
 function fmt(minor) {
-  const locale = lang === 'hr' ? 'hr-HR' : 'en-GB';
-  const num = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(minor / 100);
+  const num = new Intl.NumberFormat(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(minor / 100);
   return `${num} ${CURRENCY_LABEL[state.country]}`;
+}
+
+function fmtPct(part, whole) {
+  const pct = whole ? (part / whole) * 100 : 0;
+  return `${new Intl.NumberFormat(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(pct)} %`;
+}
+
+function fmtRate(bp) {
+  return new Intl.NumberFormat(locale(), { maximumFractionDigits: 2 }).format(bp / 100);
 }
 
 function el(tag, attrs = {}, ...children) {
@@ -393,12 +402,12 @@ function el(tag, attrs = {}, ...children) {
   return e;
 }
 
-function seg(items, active, onPick, labelFor) {
+function seg(items, active, onPick, labelFor, opts = {}) {
   return el(
     'div',
-    { class: 'seg', role: 'group' },
+    { class: `seg${opts.class ? ` ${opts.class}` : ''}`, role: 'group', 'aria-label': opts.label },
     ...items.map((x) =>
-      el('button', { type: 'button', class: x === active ? 'active' : '', onclick: () => onPick(x) }, labelFor(x)),
+      el('button', { type: 'button', 'aria-pressed': String(x === active), onclick: () => onPick(x) }, labelFor(x)),
     ),
   );
 }
@@ -416,7 +425,14 @@ function fieldControl(f, s) {
     update();
   };
   if (f.type === 'check') {
-    return el('input', { type: 'checkbox', id: `f-${f.id}`, checked: s[f.id], onchange: (e) => onChange(e.target.checked) });
+    return el('input', {
+      type: 'checkbox',
+      role: 'switch',
+      class: 'switch',
+      id: `f-${f.id}`,
+      checked: s[f.id],
+      onchange: (e) => onChange(e.target.checked),
+    });
   }
   if (f.type === 'select') {
     const opts = typeof f.options === 'function' ? f.options() : f.options.map((v) => [v, optionLabel(f, v)]);
@@ -425,7 +441,7 @@ function fieldControl(f, s) {
       { id: `f-${f.id}`, onchange: (e) => onChange(e.target.value) },
       ...opts.map(([v, label]) => el('option', { value: v, selected: String(s[f.id]) === String(v) }, label)),
     );
-    return sel;
+    return el('span', { class: 'sel' }, sel);
   }
   const attrs = {
     id: `f-${f.id}`,
@@ -436,24 +452,25 @@ function fieldControl(f, s) {
   };
   if (f.type === 'money') Object.assign(attrs, { min: 0, step: '0.01', placeholder: '0' });
   if (f.type === 'int') Object.assign(attrs, { min: f.min, max: f.max, step: 1 });
-  const input = el('input', attrs);
-  const affix = f.type === 'money' ? CURRENCY_LABEL[state.country] : f.affix;
-  if (affix) input.classList.add('affixed');
-  return el('div', { class: 'input-shell' }, input, affix ? el('span', { class: 'affix' }, affix) : null);
+  const unit = f.type === 'money' ? CURRENCY_LABEL[state.country] : f.affix;
+  return el(
+    'span',
+    { class: `num${f.type === 'money' ? ' num--money' : ''}` },
+    el('input', attrs),
+    unit ? el('span', { class: 'unit' }, unit) : null,
+  );
 }
 
 function fieldRow(f, s) {
-  const labelKey = f.id;
   // a jurisdiction-specific hint wins over the generic one
-  const sub = I18N[lang][`${labelKey}_sub_${state.country}`] ?? I18N[lang][`${labelKey}_sub`];
+  const sub = I18N[lang][`${f.id}_sub_${state.country}`] ?? I18N[lang][`${f.id}_sub`];
   let hint = null;
   if (f.hint === 'rates') {
     const u = HR_UNITS.get(Number(s.residence));
     if (u) hint = t('rates_hint').replace('{lower}', fmtRate(u[2])).replace('{higher}', fmtRate(u[3]));
   }
-  const label = el('label', { for: `f-${f.id}` }, t(labelKey), sub || hint ? el('span', { class: 'sub' }, sub || hint) : null);
-  const cls = `field${f.wide ? ' wide' : ''}${f.span2 ? ' span2' : ''}${f.full ? ' full' : ''}${f.type === 'check' ? ' check' : ''}`;
-  return el('div', { class: cls }, label, fieldControl(f, s));
+  const label = el('label', { for: `f-${f.id}` }, el('span', {}, t(f.id)), sub || hint ? el('span', { class: 'sub' }, sub || hint) : null);
+  return el('div', { class: `field${f.wide ? ' field--wide' : ''}` }, label, fieldControl(f, s));
 }
 
 function periodOptions() {
@@ -472,16 +489,36 @@ function periodOptions() {
   return out;
 }
 
-function fmtRate(bp) {
-  return new Intl.NumberFormat(lang === 'hr' ? 'hr-HR' : 'en-GB', { maximumFractionDigits: 2 }).format(bp / 100);
-}
-
 let advancedOpen = false;
+let sourcesOpen = false;
+
+// Accordion: a header button toggling a body; state lives in the caller's variable.
+function accordion(open, onToggle, headContent, body, headClass, iconClass) {
+  body.hidden = !open;
+  const head = el(
+    'button',
+    {
+      type: 'button',
+      class: headClass,
+      'aria-expanded': String(open),
+      onclick: () => {
+        const next = onToggle();
+        head.setAttribute('aria-expanded', String(next));
+        body.hidden = !next;
+      },
+    },
+    headContent,
+    el('span', { class: iconClass, 'aria-hidden': 'true' }),
+  );
+  return [head, body];
+}
 
 function renderCountryTabs() {
   const root = $('country-tabs');
   root.textContent = '';
-  root.append(seg(COUNTRIES, state.country, (c) => { state.country = c; renderInputs(); update(); }, (c) => t(`country_${c}`)));
+  root.append(
+    seg(COUNTRIES, state.country, (c) => { state.country = c; renderInputs(); update(); }, (c) => t(`country_${c}`), { label: t('country_label') }),
+  );
 }
 
 function renderInputs() {
@@ -497,7 +534,6 @@ function renderInputs() {
     min: 0,
     step: '0.01',
     inputmode: 'decimal',
-    class: 'affixed big',
     value: state.amount[country],
     oninput: (e) => {
       state.amount[country] = e.target.value === '' ? '' : Number(e.target.value);
@@ -520,61 +556,133 @@ function renderInputs() {
   root.append(
     el(
       'div',
-      { class: 'card' },
-      el('h2', {}, t('g_calc')),
-      seg(DIRECTIONS, state.dir, (d) => { state.dir = d; renderInputs(); update(); }, (d) => t(`dir_${d}`)),
+      { class: 'card card--calc' },
       el(
         'div',
-        { class: 'fields' },
-        el(
-          'div',
-          { class: 'field wide' },
-          el('label', { for: 'f-amount' }, t(`amount_${state.dir}`), country === 'SRB' ? el('span', { class: 'sub' }, t('amount_hint_SRB')) : null),
-          el('div', { class: 'input-shell' }, amountInput, el('span', { class: 'affix' }, CURRENCY_LABEL[country])),
-        ),
-        el(
-          'div',
-          { class: 'field wide' },
-          el('label', { for: 'f-period' }, t('period'), el('span', { class: 'sub' }, t('period_hint'))),
-          periodInput,
-        ),
-        ...FIELDS[country].filter((f) => f.group === 'calc').map((f) => fieldRow(f, s)),
+        { class: 'card-head' },
+        el('h2', {}, t('g_calc')),
+        seg(DIRECTIONS, state.dir, (d) => { state.dir = d; renderInputs(); update(); }, (d) => t(`dir_${d}`), { class: 'seg--dir', label: t('g_calc') }),
       ),
+      el(
+        'div',
+        { class: 'calc-grid' },
+        el(
+          'label',
+          { for: 'f-amount' },
+          el('span', {}, t(`amount_${state.dir}`)),
+          el('span', { class: 'num num--big' }, amountInput, el('span', { class: 'unit' }, CURRENCY_LABEL[country])),
+          country === 'SRB' ? el('span', { class: 'hint' }, t('amount_hint_SRB')) : null,
+        ),
+        el(
+          'label',
+          { for: 'f-period' },
+          el('span', {}, t('period')),
+          el('span', { class: 'sel sel--big' }, periodInput),
+          el('span', { class: 'hint' }, t('period_hint')),
+        ),
+      ),
+      el('div', { class: 'calc-extra' }, ...FIELDS[country].filter((f) => f.group === 'calc').map((f) => fieldRow(f, s))),
     ),
   );
 
   const visible = FIELDS[country].filter((f) => !f.showIf || f.showIf(s));
   const basic = visible.filter((f) => f.group === 'basic');
-  root.append(el('div', { class: 'card' }, el('h2', {}, t('g_basic')), el('div', { class: 'fields' }, ...basic.map((f) => fieldRow(f, s)))));
+  root.append(el('div', { class: 'card card--basic' }, el('h2', {}, t('g_basic')), el('div', { class: 'fields' }, ...basic.map((f) => fieldRow(f, s)))));
 
-  const details = el('details', { class: 'card advanced', open: advancedOpen, ontoggle: (e) => { advancedOpen = e.target.open; } });
-  details.append(el('summary', {}, t('advanced')));
-  for (const group of ['person', 'job', 'employer']) {
+  const groups = ['person', 'job', 'employer'].filter((g) => visible.some((f) => f.group === g));
+  const body = el('div', { class: 'acc-body' });
+  for (const group of groups) {
     const fs = visible.filter((f) => f.group === group);
-    if (!fs.length) continue;
-    details.append(el('h3', {}, t(`g_${group}`)), el('div', { class: 'fields' }, ...fs.map((f) => fieldRow(f, s))));
+    body.append(
+      el('div', { class: 'adv-group' }, el('span', { class: 'group-label' }, t(`g_${group}`)), el('div', { class: 'fields' }, ...fs.map((f) => fieldRow(f, s)))),
+    );
   }
   const infoKey = country === 'HR' ? 'info_HR' : country === 'SRB' ? 'info_SRB' : 'info_BIH';
-  details.append(el('ul', { class: 'info' }, ...I18N[lang][infoKey].map((x) => el('li', {}, x))));
-  root.append(details);
+  body.append(...I18N[lang][infoKey].map((x) => el('p', { class: 'hint' }, x)));
+  const [head] = accordion(
+    advancedOpen,
+    () => (advancedOpen = !advancedOpen),
+    el('span', { class: 'acc-title' }, el('span', {}, t('advanced')), el('span', {}, groups.map((g) => t(`g_${g}`)).join(' · '))),
+    body,
+    'acc-head',
+    'acc-icon',
+  );
+  root.append(el('div', { class: 'card card--acc' }, head, body));
 }
 
 function breakdownRows(rows, r) {
   return rows
     .map(([key, get, kind]) => [key, get(r), kind])
-    .filter(([key, v, kind]) => kind === 'base' || kind === 'total' || kind === 'sub' || v)
+    .filter(([, v, kind]) => kind === 'base' || kind === 'total' || kind === 'sub' || v)
     .map(([key, v, kind]) =>
       el('div', { class: `row ${kind}` }, el('span', {}, t(key)), el('span', { class: 'v' }, (kind === 'minus' ? '− ' : kind === 'plus' ? '+ ' : '') + fmt(v))),
     );
 }
 
+// Where the total employer cost goes: net, employee contributions, tax, employer contributions, non-taxable payments.
+function splitSegments(r) {
+  const country = state.country;
+  const skip = new Set(['l_tax', 'l_solidarity']);
+  const worker = EMPLOYEE_ROWS[country].filter(([k, , kind]) => kind === 'minus' && !skip.has(k)).reduce((a, [, get]) => a + (get(r) || 0), 0);
+  const employer = EMPLOYER_ROWS[country].reduce((a, [, get]) => a + (get(r) || 0), 0);
+  const other = r.employerCost - r.gross - employer;
+  const employerKey = country === 'HR' && !r.items.extendedService ? 'l_health' : 's_employer';
+  return [
+    ['r_net', r.net, 'var(--primary)'],
+    [country === 'HR' ? 's_pensionHR' : 's_employee', worker, 'var(--salmon)'],
+    ['l_tax', r.items.tax || 0, 'var(--lime)'],
+    [employerKey, employer, 'var(--border-strong)'],
+    ['l_nonTaxable', other, 'var(--border)'],
+  ].filter(([, v]) => v > 0);
+}
+
+function renderSplit(r) {
+  const segs = splitSegments(r);
+  const total = r.employerCost;
+  return el(
+    'div',
+    { class: 'split' },
+    el('span', { class: 'split__title' }, t('split_title').replace('{total}', fmt(total))),
+    el('div', { class: 'split__bar', 'aria-hidden': 'true' }, ...segs.map(([, v, c]) => el('span', { style: `flex:${v};background:${c}` }))),
+    el(
+      'div',
+      { class: 'split__legend' },
+      ...segs.map(([k, v, c]) => el('span', { class: 'split__item' }, el('i', { style: `background:${c}` }), t(k), el('span', { class: 'v' }, fmtPct(v, total)))),
+    ),
+  );
+}
+
+function sourcesBlock() {
+  const country = state.country;
+  const body = el(
+    'div',
+    { class: 'sources-body' },
+    ...I18N[lang].sources[country].map((x) => el('span', {}, x)),
+    el('span', { class: 'group-label' }, t('r_not_modelled')),
+    ...I18N[lang][`not_modelled_${country}`].map((x) => el('span', {}, x)),
+    el('span', { class: 'hint' }, t('r_verified')),
+  );
+  const [head] = accordion(sourcesOpen, () => (sourcesOpen = !sourcesOpen), el('span', {}, t('r_sources')), body, 'acc-head', 'acc-mini');
+  return el('div', { class: 'sources' }, head, body);
+}
+
+function renderTile(primaryKey, primaryValue, secondary, cost) {
+  const tile = $('tile');
+  tile.textContent = '';
+  tile.append(el('div', { class: 'tile__main' }, el('span', { class: 'tile__label' }, t(primaryKey)), el('span', { class: 'tile__value' }, primaryValue)));
+  if (secondary.length) {
+    tile.append(
+      el('div', { class: 'tile__grid' }, ...secondary.map(([key, v]) => el('div', { class: 'mini' }, el('span', { class: 'mini__label' }, t(key)), el('span', { class: 'mini__value' }, v)))),
+    );
+  }
+  $('mb-label').textContent = t(primaryKey);
+  $('mb-value').textContent = primaryValue;
+  $('mb-sub').textContent = cost === null ? '' : `${t('r_cost')} ${cost}`;
+}
+
 function renderResult(r, solved) {
-  const out = $('results');
-  out.textContent = '';
   const primaryKey = state.dir === 'g2n' ? 'r_net' : 'r_gross';
   const primaryValue = state.dir === 'g2n' ? r.net : r.gross;
-  out.append(el('div', { class: 'res-block res-primary' }, el('div', { class: 'res-label' }, t(primaryKey)), el('div', { class: 'res-value' }, fmt(primaryValue))));
-
   const secondary = [];
   if (state.dir !== 'g2n') secondary.push(['r_net', r.net]);
   if (state.dir === 'g2n') secondary.push(['r_gross', r.gross]);
@@ -584,13 +692,16 @@ function renderResult(r, solved) {
     const refund = r.items.employerReliefTiming === 'refund';
     secondary.push([refund ? 'r_effective_refund' : 'r_effective', r.effectiveEmployerCost]);
   }
-  for (const [key, v] of secondary) {
-    out.append(el('div', { class: 'res-block res-secondary' }, el('div', { class: 'res-label' }, t(key)), el('div', { class: 'res-value' }, fmt(v))));
-  }
+  renderTile(primaryKey, fmt(primaryValue), secondary.map(([k, v]) => [k, fmt(v)]), fmt(r.employerCost));
+
+  const out = $('results');
+  out.textContent = '';
+  out.append(renderSplit(r));
 
   const country = state.country;
-  out.append(el('div', { class: 'res-section-title' }, t('r_employee')), ...breakdownRows(EMPLOYEE_ROWS[country], r));
-  if (r.payout !== r.net) out.append(el('div', { class: 'row total' }, el('span', {}, t('l_payout')), el('span', { class: 'v' }, fmt(r.payout))));
+  const bd = el('div', { class: 'breakdown' });
+  bd.append(el('span', { class: 'group-label' }, t('r_employee')), ...breakdownRows(EMPLOYEE_ROWS[country], r));
+  if (r.payout !== r.net) bd.append(el('div', { class: 'row total' }, el('span', {}, t('l_payout')), el('span', { class: 'v' }, fmt(r.payout))));
   const employerRows = [
     ['l_gross', (x) => x.gross, 'base'],
     ...EMPLOYER_ROWS[country],
@@ -598,46 +709,41 @@ function renderResult(r, solved) {
     ['l_cost', (x) => x.employerCost, 'total'],
     ['l_employerRelief', (x) => x.employerCost - x.effectiveEmployerCost, 'minus'],
   ];
-  out.append(el('div', { class: 'res-section-title' }, t('r_employer')), ...breakdownRows(employerRows, r));
+  bd.append(el('span', { class: 'group-label' }, t('r_employer')), ...breakdownRows(employerRows, r));
 
   if (r.annual) {
     const a = r.annual;
-    const block = el('div', { class: 'annual' }, el('div', { class: 'res-section-title' }, t('r_annual')));
+    bd.append(el('span', { class: 'group-label' }, t('r_annual')));
     if (!a.available) {
-      block.append(el('p', { class: 'note' }, t(`a_unavailable_${a.reason}`)));
+      bd.append(el('p', { class: 'hint' }, t(`a_unavailable_${a.reason}`)));
     } else if (a.kind === 'youth' || a.kind === 'returnee') {
       const label = a.kind === 'youth' ? t('a_youth').replace('{pct}', a.youthPercent) : t('a_returnee');
-      block.append(el('div', { class: 'row total' }, el('span', {}, label), el('span', { class: 'v' }, fmt(a.refund))), el('p', { class: 'note' }, t('a_assumption')));
+      bd.append(el('div', { class: 'row total' }, el('span', {}, label), el('span', { class: 'v' }, fmt(a.refund))), el('p', { class: 'hint' }, t('a_assumption')));
     } else if (a.kind === 'annualTax') {
-      block.append(
+      bd.append(
         el('div', { class: 'row total' }, el('span', {}, t('a_annualTax')), el('span', { class: 'v' }, fmt(a.tax))),
-        el('p', { class: 'note' }, `${t('a_annualTax_note').replace('{year}', a.incomeYear)} ${t('a_assumption')}`),
+        el('p', { class: 'hint' }, `${t('a_annualTax_note').replace('{year}', a.incomeYear)} ${t('a_assumption')}`),
       );
     } else if (a.kind === 'wageIncrease') {
-      block.append(el('div', { class: 'row total' }, el('span', {}, t('a_wageIncrease')), el('span', { class: 'v' }, fmt(a.refund))));
+      bd.append(el('div', { class: 'row total' }, el('span', {}, t('a_wageIncrease')), el('span', { class: 'v' }, fmt(a.refund))));
     }
-    out.append(block);
   }
+  out.append(bd);
 
   const notes = [...r.notes];
   if (r.provisional) notes.unshift('provisional');
   if (solved && !solved.exact) notes.push('notExact');
   if (r.items.employerReliefTiming === 'refund') notes.push('refundLater');
-  if (notes.length) {
-    out.append(el('div', { class: 'res-section-title' }, t('r_notes')), el('ul', { class: 'notes' }, ...notes.map((k) => el('li', {}, t(`n_${k}`)))));
-  }
+  if (notes.length) out.append(el('ul', { class: 'notes' }, ...notes.map((k) => el('li', {}, t(`n_${k}`)))));
 
-  out.append(
-    el(
-      'details',
-      { class: 'sources' },
-      el('summary', {}, t('r_sources')),
-      el('ul', {}, ...I18N[lang].sources[country].map((x) => el('li', {}, x))),
-      el('div', { class: 'res-section-title' }, t('r_not_modelled')),
-      el('ul', {}, ...I18N[lang][`not_modelled_${country}`].map((x) => el('li', {}, x))),
-      el('p', { class: 'note' }, t('r_verified')),
-    ),
-  );
+  out.append(sourcesBlock());
+}
+
+function renderError() {
+  renderTile(state.dir === 'g2n' ? 'r_net' : 'r_gross', '—', [], null);
+  const out = $('results');
+  out.textContent = '';
+  out.append(el('p', { class: 'error' }, t('r_error')));
 }
 
 function update() {
@@ -657,7 +763,7 @@ function update() {
     }
     renderResult(r, solved);
   } catch (err) {
-    $('results').textContent = t('r_error');
+    renderError();
     console.error(err);
   }
 }
@@ -670,8 +776,9 @@ function applyLang() {
     const v = tr[e.dataset.i18n];
     if (typeof v === 'string') e.textContent = v;
   });
-  $('lang-hr').classList.toggle('active', lang === 'hr');
-  $('lang-en').classList.toggle('active', lang === 'en');
+  $('lang-hr').setAttribute('aria-pressed', String(lang === 'hr'));
+  $('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
+  if (window.tabuTheme) window.tabuTheme.apply();
   renderInputs();
   update();
 }
