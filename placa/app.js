@@ -461,8 +461,7 @@ function dzsNonTaxableHint() {
   const [y, mo] = d.month.split('-').map(Number);
   const whole = (minor) => `${new Intl.NumberFormat(lang === 'hr' ? 'hr-HR' : 'en-GB').format(Math.round(minor / 100))} €`;
   return t('nonTaxable_sub_HR')
-    .replace('{month}', `${t('months')[mo - 1]} ${y}.`)
-    .replace('{perRecipient}', whole(d.perRecipient))
+    .replace('{month}', `${t('months')[mo - 1]} ${y}${lang === 'hr' ? '.' : ''}`)
     .replace('{perEmployee}', whole(d.perEmployee));
 }
 
