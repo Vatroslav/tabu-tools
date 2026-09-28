@@ -576,7 +576,13 @@ function applyLang(){
 }
 
 document.querySelectorAll('.lang-toggle button').forEach(b=>{
-  b.addEventListener('click', ()=>{ lang = b.dataset.lang; applyLang(); });
+  b.addEventListener('click', ()=>{
+    lang = b.dataset.lang;
+    // Keep the manual choice in the URL so a refresh (or a shared link) stays in this language
+    const u = new URL(location.href); u.searchParams.set('lang', lang);
+    history.replaceState(null, '', u);
+    applyLang();
+  });
 });
 document.getElementById('reset').addEventListener('click', ()=>{
   buildInputs();   // restores the Sheet default values
