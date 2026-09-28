@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Turnover Cost Calculator | Tabu</title>
+<meta name="description" content="Estimate the real cost of losing an employee - vacancy, recruitment, onboarding and more.">
+<link rel="canonical" href="https://kalkulator.tabu.hr/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tabu">
+<meta property="og:url" content="https://kalkulator.tabu.hr/">
+<meta property="og:title" content="Employee Turnover Cost Calculator | Tabu">
+<meta property="og:description" content="Estimate the real cost of losing an employee - vacancy, recruitment, onboarding and more.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
+<link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
+<!-- Plausible: isti site kao tabu.hr (cookieless); kalkulator se u dashboardu filtrira po hostnameu -->
+<script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Brand accenti (identitet/naglasci - NE status) */
+    --lavender:#BCB2F7;
+    --lime:#E0FE90;
+    --salmon:#FF9883;
+    --ink:#15131F;
+    /* Background - cool near-black ramp */
+    --bg:#121216;
+    --surface:#17171C;
+    --surface-2:#26262E;
+    /* Borders */
+    --border:#2E2E38;
+    --border-subtle:#1E1E25;
+    /* Text */
+    --text:#ECECF0;
+    --muted:#8A8A96;
+    --text-subtle:#6C6C78;
+    /* Semantic (status - NE brand) */
+    --success:#54CE88;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Geist',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 36px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* Header */
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:26px 0 10px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .logo{
+    display:inline-flex;align-items:center;
+    color:var(--text);text-decoration:none;transition:.15s;
+  }
+  .brand .logo:hover{color:var(--lavender)}
+  .logo-svg{height:23px;width:auto;display:block}
+  .lang-toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px}
+  .lang-toggle button{
+    font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    border:0;background:transparent;color:var(--muted);
+    padding:6px 14px;border-radius:999px;transition:.15s;
+  }
+  .lang-toggle button.active{background:var(--lavender);color:var(--ink)}
+
+  /* Hero */
+  .hero{padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:18px}
+  .hero h1{font-size:25px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+  .hero p{color:var(--muted);margin-top:7px;font-size:14.5px;text-wrap:pretty}
+
+  /* Layout */
+  .grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+
+  /* Input cards */
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:11px 14px 4px;margin-bottom:10px;
+  }
+  .card h2{
+    font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--lavender);margin-bottom:2px;
+  }
+  .card .hint{font-size:12.5px;color:var(--muted);margin-bottom:5px;line-height:1.35}
+
+  /* Two-column dense field grid (Sheet-like density) */
+  .fields{display:grid;grid-template-columns:1fr 1fr;column-gap:26px}
+  .field{display:grid;grid-template-columns:1fr 104px;gap:12px;align-items:center;
+    padding:5px 0;border-top:1px solid var(--border-subtle)}
+  /* hide the divider on the first row of each column */
+  .fields .field:nth-child(1),.fields .field:nth-child(2){border-top:0}
+  .field label{font-size:13.5px;color:var(--text);line-height:1.3}
+  .field .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+
+  .input-shell{position:relative;display:flex;align-items:center}
+  .input-shell .affix{
+    position:absolute;right:12px;font-size:13px;color:var(--muted);
+    font-family:'Geist Mono',monospace;pointer-events:none;
+  }
+  .input-shell.left .affix{left:12px;right:auto}
+  input[type=number]{
+    width:100%;font-family:'Geist Mono',monospace;font-size:14px;font-weight:500;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+    border-radius:8px;padding:7px 11px;text-align:right;transition:.15s;
+    -moz-appearance:textfield;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number].affixed{padding-right:30px}
+  input[type=number].affixed-left{padding-left:26px;text-align:right}
+  input[type=number]:focus{outline:none;border-color:var(--lavender);box-shadow:0 0 0 3px rgba(188,178,247,0.22)}
+  input[type=number]::placeholder{color:var(--text-subtle)}
+
+  /* Results */
+  .results{position:sticky;top:16px}
+  .results-card{
+    background:linear-gradient(165deg,#1E1E25,#17171C);
+    border:1px solid var(--border);border-radius:var(--radius);padding:18px 18px;
+  }
+  .res-block{padding:7px 0}
+  .res-block + .res-block{border-top:1px solid var(--border)}
+  .res-label{font-size:12.5px;color:var(--muted);margin-bottom:3px}
+  .res-value{font-family:'Geist Mono',monospace;font-weight:600;letter-spacing:-.01em}
+  .res-primary .res-value{font-size:31px;color:var(--lavender)}
+  .res-primary .res-label{font-size:13px;color:var(--text);font-weight:500}
+  .res-secondary .res-value{font-size:18px;color:var(--text)}
+  .res-sub .res-value{font-size:15px;color:var(--lavender)}
+  .res-divider{height:1px;background:var(--border);margin:6px 0}
+  .res-section-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 0 0}
+
+  .cta{
+    display:block;text-align:center;margin-top:14px;
+    background:var(--lavender);color:var(--ink);font-weight:600;font-size:14.5px;
+    text-decoration:none;padding:13px;border-radius:12px;transition:.15s;
+  }
+  .cta:hover{filter:brightness(1.06)}
+  .reset{
+    display:block;width:100%;margin-top:10px;cursor:pointer;
+    background:transparent;border:1px solid var(--border);color:var(--muted);
+    font-family:inherit;font-size:13px;font-weight:500;padding:10px;border-radius:12px;transition:.15s;
+  }
+  .reset:hover{border-color:var(--muted);color:var(--text)}
+
+  footer{
+    margin-top:26px;padding-top:18px;border-top:1px solid var(--border);
+    color:var(--muted);font-size:13px;line-height:1.7;
+  }
+  footer a{color:var(--lavender);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  @media(max-width:980px){
+    .fields{grid-template-columns:1fr}
+    .fields .field:nth-child(2){border-top:1px solid var(--border-subtle)}
+  }
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr}
+    .results{position:static}
+    .hero h1{font-size:23px}
+    .field{grid-template-columns:1fr 116px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <a class="logo" href="https://www.tabu.hr" target="_blank" rel="noopener" aria-label="Tabu">
+        <svg class="logo-svg" viewBox="0 0 3277 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tabu">
+          <path d="M289.493 165.865L4.84394e-05 165.865L6.29397e-05 0L780.314 6.82172e-05L780.314 165.865L490.822 165.865L490.822 701.634L289.493 701.634L289.493 165.865Z" fill="currentColor"/>
+          <path d="M903.392 455.47L1290.26 455.47L1290.26 605.538L903.392 605.538L903.392 455.47ZM1544.22 701.634L1311.31 701.634L1096.83 210.622L882.338 701.634L649.428 701.634L978.397 2.87594e-05L1215.25 4.94661e-05L1544.22 701.634Z" fill="currentColor"/>
+          <path d="M1598.04 0L2137.55 4.71654e-05C2184.92 5.13067e-05 2224.4 6.58195 2258.61 21.0622C2292.82 35.5425 2319.14 56.6047 2337.56 84.2488C2355.98 110.576 2365.2 142.17 2365.2 179.029C2365.2 214.571 2353.35 246.164 2330.98 271.176C2307.3 297.503 2274.4 314.616 2233.61 323.831C2292.82 326.464 2338.88 343.577 2371.78 376.487C2405.99 409.396 2423.09 454.153 2423.09 508.125C2423.09 548.933 2412.57 583.159 2391.51 612.12C2370.46 641.08 2340.19 663.459 2299.4 677.939C2259.93 693.736 2213.87 701.634 2159.92 701.634L1598.04 701.634L1598.04 0ZM2141.5 534.453C2166.5 534.453 2186.24 529.187 2199.4 518.656C2213.87 506.809 2220.45 492.329 2220.45 473.899C2220.45 454.153 2213.87 439.673 2199.4 429.142C2186.24 417.294 2166.5 412.029 2141.5 412.029L1799.37 412.029L1799.37 534.453L2141.5 534.453ZM2094.13 263.277C2115.18 263.277 2132.29 258.012 2145.44 248.797C2157.29 239.582 2163.87 226.418 2163.87 210.622C2163.87 196.142 2157.29 185.611 2145.44 177.712C2132.29 169.814 2115.18 165.865 2094.13 165.865L1799.37 165.865L1799.37 263.277L2094.13 263.277Z" fill="currentColor"/>
+          <path d="M2873.8 719.947C2790.9 719.947 2719.85 706.783 2658 677.822C2597.47 650.178 2551.41 610.687 2518.52 558.031C2485.62 505.376 2469.83 456.785 2469.83 385.701L2469.83 0L2671.16 1.76007e-05L2671.16 322.838C2671.16 387.341 2689.58 437.363 2725.11 474.222C2761.95 509.764 2810.64 528.194 2873.8 528.194C2935.65 528.194 2985.65 509.764 3021.18 474.222C3056.71 437.363 3075.13 387.341 3075.13 322.838L3075.13 5.29172e-05L3276.46 7.05179e-05L3276.46 385.701C3276.46 456.786 3260.67 505.376 3227.77 558.031C3196.19 610.687 3148.82 650.178 3088.29 677.822C3027.76 706.783 2955.39 719.947 2873.8 719.947Z" fill="currentColor"/>
+        </svg>
+      </a>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button id="lang-hr" data-lang="hr">HR</button>
+      <button id="lang-en" data-lang="en" class="active">EN</button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1 data-i18n="title"></h1>
+    <p data-i18n="subtitle"></p>
+  </div>
+
+  <div class="grid">
+    <!-- INPUTS -->
+    <div class="inputs" id="inputs"></div>
+
+    <!-- RESULTS -->
+    <div class="results">
+      <div class="results-card">
+        <div class="res-block res-primary">
+          <div class="res-label" data-i18n="r_total"></div>
+          <div class="res-value" id="out-total">—</div>
+        </div>
+        <div class="res-block res-secondary">
+          <div class="res-label" data-i18n="r_total_chance"></div>
+          <div class="res-value" id="out-total-chance">—</div>
+        </div>
+
+        <div class="res-section-title" data-i18n="r_hiring_breakdown"></div>
+        <div class="res-block res-sub">
+          <div class="res-label" data-i18n="r_hiring_new"></div>
+          <div class="res-value" id="out-hiring-new">—</div>
+        </div>
+        <div class="res-block res-sub">
+          <div class="res-label" data-i18n="r_onboarding_salary"></div>
+          <div class="res-value" id="out-onboarding">—</div>
+        </div>
+        <div class="res-block res-secondary">
+          <div class="res-label" data-i18n="r_hiring_total"></div>
+          <div class="res-value" id="out-hiring-total">—</div>
+        </div>
+        <div class="res-block res-sub">
+          <div class="res-label" data-i18n="r_hiring_chance"></div>
+          <div class="res-value" id="out-hiring-chance">—</div>
+        </div>
+
+        <a class="cta" id="cta" href="https://www.tabu.hr/en/poslovni" target="_blank" rel="noopener" data-i18n="cta"></a>
+        <button class="reset" id="reset" type="button" data-i18n="reset"></button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div><a href="https://docs.google.com/spreadsheets/d/1gmp7K2Ylekqr7nEIo-SYdDUULPaWb4jVhRnz-K2i9W4/edit" target="_blank" rel="noopener" data-i18n="footer_sheet"></a></div>
+    <div data-i18n="footer_author"></div>
+    <div data-i18n="footer_contact"></div>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   Model — extracted 1:1 from the original Google Sheet.
+   Green input cells = user values; empty -> fall back to default.
+   if0(x,d): use x only when x>0, else default d  (sheet: if(A>0,A,C))
+   add(x):   blank cell counts as 0, added directly
+   base(x,d):direct value, default when empty
+============================================================ */
+
+const FIELDS = [
+  {group:'general'},
+  {id:'workingHours', kind:'base', def:160, affix:'h'},
+
+  {group:'departing'},
+  {id:'salaryDeparting', kind:'base', def:2500, affix:'eur'},
+  {id:'onboardingCompleted', kind:'add', def:0, affix:'mo'},
+  {id:'monthsVacant', kind:'if0', def:3, affix:'mo'},
+  {id:'coveringCost', kind:'if0dyn', def:s=>s.salaryDeparting/2, pf:1250, affix:'eur'},
+  {id:'opportunityCost', kind:'add', def:0, affix:'eur'},
+  {id:'disgruntledCost', kind:'add', def:0, affix:'eur'},
+  {id:'alreadySpent', kind:'if0dyn', def:s=>s.E6 + s.salaryDeparting*s.onboardingCompleted, pf:1825, affix:'eur'},
+  {id:'onboardingMonths', kind:'if0', def:3, affix:'mo'},
+  {id:'relocationCost', kind:'add', def:0, affix:'eur'},
+
+  {group:'recruitment'},
+  {id:'salaryRecruiter', kind:'base', def:1500, affix:'eur'},
+  {id:'hoursReviewing', kind:'if0', def:8, affix:'h'},
+  {id:'hoursInterviewing', kind:'if0', def:16, affix:'h'},
+  {id:'adminCost', kind:'if0', def:100, affix:'eur'},
+  {id:'advertisingCost', kind:'if0', def:100, affix:'eur'},
+  {id:'earlyDepartureChance', kind:'if0', def:5, affix:'pct'},
+
+  {group:'manager'},
+  {id:'salaryManager', kind:'base', def:3000, affix:'eur'},
+  {id:'managerHours', kind:'if0', def:8, affix:'h'},
+
+  {group:'others'},
+  {id:'salaryOthers', kind:'base', def:2000, affix:'eur'},
+  {id:'numPeople', kind:'if0', def:2, affix:'x'},
+  {id:'hoursPerPerson', kind:'if0', def:5, affix:'h'},
+
+  {group:'training'},
+  {id:'salaryTrainer', kind:'base', def:3000, affix:'eur'},
+  {id:'trainingHours', kind:'if0', def:60, affix:'h'},
+
+  {group:'referral'},
+  {id:'referralBonus', kind:'add', def:0, affix:'eur'},
+];
+
+const I18N = {
+  en:{
+    doc_title:'Employee Turnover Cost Calculator | Tabu',
+    cta_url:'https://www.tabu.hr/en/poslovni',
+    title:'Employee Turnover Cost Calculator',
+    subtitle:'Losing an employee costs far more than a final paycheck. Enter your numbers below - or keep the defaults - to estimate the true cost of replacing someone.',
+    g_general:'General', g_general_h:'',
+    g_departing:'Departing employee & vacancy', g_departing_h:'The cost of the gap left behind and what was already invested in the person leaving.',
+    g_recruitment:'Recruitment & selection', g_recruitment_h:'Time and money spent finding a replacement.',
+    g_manager:'Manager involvement', g_manager_h:'Manager time spent on interviews and reviewing tasks.',
+    g_others:'Other employees involved', g_others_h:'Colleagues who joined interviews or reviewed candidate tasks.',
+    g_training:'Training the new hire', g_training_h:'',
+    g_referral:'Referral', g_referral_h:'',
+
+    workingHours:'Monthly working hours',
+    salaryDeparting:'Monthly gross salary of the departing employee',
+    onboardingCompleted:'If the person left during onboarding, months of onboarding completed',
+    monthsVacant:'Months the position will remain vacant',
+    coveringCost:'Monthly cost of others covering the position',
+    opportunityCost:'Opportunity cost of the vacant position',
+    disgruntledCost:'Potential cost of a disgruntled employee spreading dissatisfaction',
+    alreadySpent:'Already spent on the departing employee (recruitment + all other costs)',
+    onboardingMonths:'Number of onboarding months (new hire)',
+    relocationCost:'Relocation costs (hiring from another city or country)',
+    salaryRecruiter:'Monthly gross salary of the person handling recruitment',
+    hoursReviewing:'Hours spent reviewing applications',
+    hoursInterviewing:'Hours spent interviewing candidates',
+    adminCost:'Admin costs for recruitment, selection & onboarding tools',
+    advertisingCost:'Job ads, sponsored posts, agencies, hiring events',
+    earlyDepartureChance:'Chance of doubling recruitment costs due to early departure',
+    salaryManager:'Monthly gross salary of the manager involved in selection',
+    managerHours:'Total manager hours interviewing & reviewing tasks',
+    salaryOthers:'Average monthly gross salary of other employees involved',
+    numPeople:'Number of people',
+    hoursPerPerson:'Total interview & review hours (per person)',
+    salaryTrainer:'Monthly gross salary of the person training the new hire',
+    trainingHours:'Training hours',
+    referralBonus:'Referral bonus',
+
+    unit_mo:'mo',
+    r_total:'Total cost of turnover',
+    r_total_chance:'Adjusted for the chance of an early departure',
+    r_hiring_breakdown:'Hiring breakdown',
+    r_hiring_new:'Cost of hiring a new employee',
+    r_onboarding_salary:'Salary during onboarding',
+    r_hiring_total:'Total cost of hiring',
+    r_hiring_chance:'Hiring cost adjusted for early departure',
+    cta:'See how Tabu helps your business →',
+    reset:'Reset to defaults',
+    footer_sheet:'Prefer a spreadsheet? Open the Google Sheets version →',
+    footer_author:'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
+    footer_contact:'Questions or feedback? Reach me at vatroslav.mileusnic@tabu.hr',
+  },
+  hr:{
+    doc_title:'Kalkulator troška odlaska zaposlenika | Tabu',
+    cta_url:'https://www.tabu.hr/poslovni',
+    title:'Kalkulator troška odlaska zaposlenika',
+    subtitle:'Gubitak zaposlenika košta puno više od zadnje plaće. Unesi svoje brojke - ili ostavi zadane - da procijeniš stvarni trošak zamjene osobe.',
+    g_general:'Općenito', g_general_h:'',
+    g_departing:'Zaposlenik koji odlazi i prazna pozicija', g_departing_h:'Trošak praznine koju ostavlja i onoga što je već uloženo u osobu koja odlazi.',
+    g_recruitment:'Zapošljavanje i selekcija', g_recruitment_h:'Vrijeme i novac potrošeni na pronalazak zamjene.',
+    g_manager:'Uključenost menadžera', g_manager_h:'Vrijeme menadžera na intervjuima i pregledu zadataka.',
+    g_others:'Ostali uključeni zaposlenici', g_others_h:'Kolege koji su sudjelovali na intervjuima ili pregledavali zadatke kandidata.',
+    g_training:'Obuka novog zaposlenika', g_training_h:'',
+    g_referral:'Preporuka', g_referral_h:'',
+
+    workingHours:'Mjesečni broj radnih sati',
+    salaryDeparting:'Mjesečna bruto 1 plaća zaposlenika koji odlazi',
+    onboardingCompleted:'Ako je osoba otišla tijekom onboardinga, broj odrađenih mjeseci onboardinga',
+    monthsVacant:'Broj mjeseci koliko će pozicija ostati prazna',
+    coveringCost:'Mjesečni trošak pokrivanja pozicije od strane drugih',
+    opportunityCost:'Oportunitetni trošak prazne pozicije',
+    disgruntledCost:'Mogući trošak nezadovoljnog zaposlenika koji širi nezadovoljstvo',
+    alreadySpent:'Već potrošeno na zaposlenika koji odlazi (zapošljavanje + svi ostali troškovi)',
+    onboardingMonths:'Broj mjeseci onboardinga (novi zaposlenik)',
+    relocationCost:'Troškovi preseljenja (zapošljavanje iz drugog grada ili države)',
+    salaryRecruiter:'Mjesečna bruto 1 plaća osobe zadužene za zapošljavanje i selekciju',
+    hoursReviewing:'Sati provedeni na pregledu prijava',
+    hoursInterviewing:'Sati provedeni na intervjuiranju kandidata',
+    adminCost:'Administrativni troškovi alata za zapošljavanje, selekciju i onboarding',
+    advertisingCost:'Oglašavanje pozicije, sponzorirani sadržaj, agencije, eventi zapošljavanja',
+    earlyDepartureChance:'Šansa udvostručenja troška zapošljavanja zbog ranog odlaska',
+    salaryManager:'Mjesečna bruto 1 plaća menadžera uključenog u selekciju',
+    managerHours:'Ukupni sati menadžera na intervjuima i pregledu zadataka',
+    salaryOthers:'Prosječna mjesečna bruto 1 plaća ostalih uključenih zaposlenika',
+    numPeople:'Broj ljudi',
+    hoursPerPerson:'Ukupni sati intervjua i pregleda (po osobi)',
+    salaryTrainer:'Mjesečna bruto 1 plaća osobe koja obučava novog zaposlenika',
+    trainingHours:'Broj sati obuke',
+    referralBonus:'Bonus za preporuku',
+
+    unit_mo:'mj',
+    r_total:'Ukupni trošak odlaska',
+    r_total_chance:'Uvećan za šansu ranog odlaska',
+    r_hiring_breakdown:'Razrada zapošljavanja',
+    r_hiring_new:'Trošak zapošljavanja novog zaposlenika',
+    r_onboarding_salary:'Plaća tijekom onboardinga',
+    r_hiring_total:'Ukupni trošak zapošljavanja',
+    r_hiring_chance:'Trošak zapošljavanja uvećan za rani odlazak',
+    cta:'Pogledaj kako Tabu pomaže tvojem poslovanju →',
+    reset:'Vrati na zadane vrijednosti',
+    footer_sheet:'Više voliš tablicu? Otvori Google Sheets verziju →',
+    footer_author:'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
+    footer_contact:'Pitanja ili povratne informacije? Piši mi na vatroslav.mileusnic@tabu.hr',
+  }
+};
+
+// Jezik: ?lang=hr|en (link iz posta), inače jezik preglednika; fallback EN
+function initialLang(){
+  const p = new URLSearchParams(location.search).get('lang');
+  if(p==='hr' || p==='en') return p;
+  return (navigator.language||'').toLowerCase().startsWith('hr') ? 'hr' : 'en';
+}
+// UTM na CTA-u: Plausible na tabu.hr vidi dolazak iz kalkulatora kao izvor
+const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
+
+let lang = initialLang();
+let touched = new Set();   // linked-default fields the user has manually overridden
+
+/* Build the input DOM */
+function buildInputs(){
+  const root = document.getElementById('inputs');
+  root.innerHTML = '';
+  touched = new Set();
+  let card = null, fieldsWrap = null;
+  for(const f of FIELDS){
+    if(f.group){
+      card = document.createElement('div');
+      card.className = 'card';
+      const h2 = document.createElement('h2'); h2.dataset.i18n = 'g_'+f.group;
+      const hint = document.createElement('div'); hint.className='hint'; hint.dataset.i18n = 'g_'+f.group+'_h';
+      card.appendChild(h2); card.appendChild(hint);
+      fieldsWrap = document.createElement('div'); fieldsWrap.className = 'fields';
+      card.appendChild(fieldsWrap);
+      root.appendChild(card);
+      continue;
+    }
+    const row = document.createElement('div'); row.className='field';
+    const lab = document.createElement('label'); lab.setAttribute('for', f.id); lab.dataset.i18n = f.id;
+    const shell = document.createElement('div'); shell.className='input-shell';
+    const inp = document.createElement('input');
+    inp.type='number'; inp.id=f.id; inp.min='0'; inp.step='any'; inp.autocomplete='off';
+    const affix = document.createElement('span'); affix.className='affix';
+    if(f.affix==='eur'){ shell.classList.add('left'); affix.textContent='€'; inp.classList.add('affixed-left'); }
+    else if(f.affix==='pct'){ affix.textContent='%'; inp.classList.add('affixed'); }
+    else if(f.affix==='h'){ affix.textContent='h'; inp.classList.add('affixed'); }
+    else if(f.affix==='mo'){ affix.dataset.i18n='unit_mo'; inp.classList.add('affixed'); }
+    else if(f.affix==='x'){ affix.textContent='×'; inp.classList.add('affixed'); }
+    shell.appendChild(inp); shell.appendChild(affix);
+    row.appendChild(lab); row.appendChild(shell);
+    fieldsWrap.appendChild(row);
+    // Prefill with the Sheet's default values; optional additive fields stay blank (=0).
+    // Linked fields (if0dyn) are filled live by compute() so they track their formula.
+    if(f.kind!=='add' && f.kind!=='if0dyn'){
+      inp.value = f.def;
+    }
+    inp.addEventListener('input', ()=>{ if(f.kind==='if0dyn') touched.add(f.id); compute(); });
+  }
+}
+
+/* Read raw input value (NaN if empty) */
+function raw(id){
+  const el = document.getElementById(id);
+  if(!el || el.value.trim()==='') return NaN;
+  return parseFloat(el.value);
+}
+
+function compute(){
+  const s = {};
+  // base values (direct, default when empty)
+  s.workingHours = (raw('workingHours')>0) ? raw('workingHours') : 160;
+  const base = (id,d)=> isNaN(raw(id)) ? d : raw(id);
+  const if0  = (id,d)=> (raw(id)>0) ? raw(id) : d;
+  const add  = (id)=> isNaN(raw(id)) ? 0 : raw(id);
+  // Linked default: shows & uses the computed value, auto-updating until the
+  // user types into it (mirrors the Sheet's recomputing C-column formulas).
+  // Clearing the field re-links it.
+  const linked = (id,defVal)=>{
+    const el = document.getElementById(id);
+    const r = raw(id);
+    if(!touched.has(id) || isNaN(r)){
+      touched.delete(id);
+      el.value = Math.round(defVal*100)/100;
+      return defVal;
+    }
+    return (r>0) ? r : defVal;
+  };
+
+  s.salaryDeparting = base('salaryDeparting',2500);
+  s.salaryRecruiter = base('salaryRecruiter',1500);
+  s.salaryManager   = base('salaryManager',3000);
+  s.salaryOthers    = base('salaryOthers',2000);
+  s.salaryTrainer   = base('salaryTrainer',3000);
+
+  const H = s.workingHours || 160;
+  const hDep = s.salaryDeparting / H;
+  const hRec = s.salaryRecruiter / H;
+  const hMgr = s.salaryManager / H;
+  const hOth = s.salaryOthers / H;
+  const hTrn = s.salaryTrainer / H;
+
+  s.onboardingCompleted = add('onboardingCompleted');
+  s.monthsVacant        = if0('monthsVacant',3);
+  s.coveringCost        = linked('coveringCost', s.salaryDeparting/2);
+  s.opportunityCost     = add('opportunityCost');
+  s.disgruntledCost     = add('disgruntledCost');
+  s.onboardingMonths    = if0('onboardingMonths',3);
+  s.relocationCost      = add('relocationCost');
+  s.hoursReviewing      = if0('hoursReviewing',8);
+  s.hoursInterviewing   = if0('hoursInterviewing',16);
+  s.adminCost           = if0('adminCost',100);
+  s.advertisingCost     = if0('advertisingCost',100);
+  s.earlyDepartureChance= if0('earlyDepartureChance',5) / 100;
+  s.managerHours        = if0('managerHours',8);
+  s.numPeople           = if0('numPeople',2);
+  s.hoursPerPerson      = if0('hoursPerPerson',5);
+  s.trainingHours       = if0('trainingHours',60);
+  s.referralBonus       = add('referralBonus');
+
+  // E6 — Cost of hiring a new employee
+  const E6 = hRec*(s.hoursReviewing + s.hoursInterviewing)
+           + s.adminCost + s.advertisingCost
+           + hMgr*s.managerHours
+           + hTrn*s.trainingHours
+           + s.relocationCost
+           + hOth*s.numPeople*s.hoursPerPerson
+           + s.referralBonus;
+  s.E6 = E6;
+
+  // E7 — Salary during onboarding (new hire)
+  const E7 = s.salaryDeparting * s.onboardingMonths;
+  // E8 — Total cost of hiring
+  const E8 = E6 + E7;
+
+  // Already spent on departing — linked default = E6 + salary*onboardingCompleted
+  const alreadySpent = linked('alreadySpent', E6 + s.salaryDeparting*s.onboardingCompleted);
+
+  // E2 — Total cost of turnover
+  const E2 = s.monthsVacant*s.coveringCost
+           + s.opportunityCost
+           + s.disgruntledCost
+           + alreadySpent
+           + E6
+           + s.salaryDeparting*s.onboardingCompleted;
+
+  const E3 = E2 * (1 + s.earlyDepartureChance);   // total + chance
+  const E9 = E8 * (1 + s.earlyDepartureChance);   // hiring + chance
+
+  setOut('out-total', E2);
+  setOut('out-total-chance', E3);
+  setOut('out-hiring-new', E6);
+  setOut('out-onboarding', E7);
+  setOut('out-hiring-total', E8);
+  setOut('out-hiring-chance', E9);
+}
+
+function fmt(n){
+  if(!isFinite(n)) n = 0;
+  const rounded = Math.round(n);
+  if(lang==='hr'){
+    return new Intl.NumberFormat('hr-HR',{maximumFractionDigits:0}).format(rounded) + ' €';
+  }
+  return '€' + new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(rounded);
+}
+function setOut(id,val){ document.getElementById(id).textContent = fmt(val); }
+
+function applyLang(){
+  const t = I18N[lang];
+  document.documentElement.lang = lang;
+  document.title = t.doc_title;
+  document.getElementById('cta').href = t.cta_url + '?' + CTA_UTM;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(t[key]!==undefined){
+      el.textContent = t[key];
+      if(el.classList.contains('hint') && t[key]===''){ el.style.display='none'; }
+      else if(el.classList.contains('hint')){ el.style.display=''; }
+    }
+  });
+  document.getElementById('lang-en').classList.toggle('active', lang==='en');
+  document.getElementById('lang-hr').classList.toggle('active', lang==='hr');
+  compute();
+}
+
+document.querySelectorAll('.lang-toggle button').forEach(b=>{
+  b.addEventListener('click', ()=>{ lang = b.dataset.lang; applyLang(); });
+});
+document.getElementById('reset').addEventListener('click', ()=>{
+  buildInputs();   // restores the Sheet default values
+  applyLang();
+});
+
+buildInputs();
+applyLang();
+</script>
+</body>
+</html>
