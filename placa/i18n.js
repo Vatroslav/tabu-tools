@@ -109,8 +109,9 @@ const HR = {
   extendedService_FBIH_12_16: 'više od 15',
   nonTaxable: 'Neoporezivi primici',
   nonTaxable_sub: 'Topli obrok, prijevoz, nagrade u zakonskim iznosima',
-  nonTaxable_sub_HR: 'Prosjek za {month} (DZS): {perRecipient} po primatelju, {perEmployee} po zaposlenom',
-  months: ['siječanj', 'veljača', 'ožujak', 'travanj', 'svibanj', 'lipanj', 'srpanj', 'kolovoz', 'rujan', 'listopad', 'studeni', 'prosinac'],
+  nonTaxable_sub_HR: 'U {month} zaposleni su u prosjeku dobili {perEmployee} neoporezivih primitaka (DZS).',
+  // locative: "u srpnju"
+  months: ['siječnju', 'veljači', 'ožujku', 'travnju', 'svibnju', 'lipnju', 'srpnju', 'kolovozu', 'rujnu', 'listopadu', 'studenome', 'prosincu'],
 
   workShare: 'Radno vrijeme (% punog)',
   multipleEmployers: 'Nepuno vrijeme kod više poslodavaca',
@@ -354,7 +355,7 @@ const EN = {
   extendedService_FBIH_12_16: 'more than 15',
   nonTaxable: 'Non-taxable payments',
   nonTaxable_sub: 'Meal allowance, transport, bonuses within statutory limits',
-  nonTaxable_sub_HR: 'Average for {month} (DZS): {perRecipient} per recipient, {perEmployee} per employee',
+  nonTaxable_sub_HR: 'In {month} employees received {perEmployee} in non-taxable payments on average (DZS).',
   months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
   workShare: 'Working time (% of full time)',
