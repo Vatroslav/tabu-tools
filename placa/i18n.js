@@ -276,7 +276,7 @@ const HR = {
   sources: SOURCES,
 
   footer_author: 'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
-  footer_contact: 'Pitanja ili povratne informacije? Piši mi na vatroslav.mileusnic@tabu.hr',
+  footer_contact: 'Pitanja ili povratne informacije? Piši mi na vatroslav@tabu.hr',
 };
 
 const EN = {
@@ -515,7 +515,7 @@ const EN = {
   not_modelled_BD: ['Incentive of 5,000 or 7,000 KM per new hire', 'Cost-of-living aid for 2026'],
 
   footer_author: 'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
-  footer_contact: 'Questions or feedback? Reach me at vatroslav.mileusnic@tabu.hr',
+  footer_contact: 'Questions or feedback? Reach me at vatroslav@tabu.hr',
 };
 
 export const I18N = { hr: HR, en: EN };
