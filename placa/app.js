@@ -677,7 +677,8 @@ function renderTile(primaryKey, primaryValue, secondary, cost) {
   }
   $('mb-label').textContent = t(primaryKey);
   $('mb-value').textContent = primaryValue;
-  $('mb-sub').textContent = cost === null ? '' : `${t('r_cost')} ${cost}`;
+  $('mb-sub').textContent = '';
+  if (cost !== null) $('mb-sub').append(`${t('r_cost')} `, el('span', {}, cost));
 }
 
 function renderResult(r, solved) {

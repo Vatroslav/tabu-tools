@@ -168,7 +168,7 @@ button{cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--primary);color:var(--ink);font-weight:600}
 .seg-scroll{overflow-x:auto;margin:0 -16px;padding:0 16px;scrollbar-width:none}
 .seg-scroll::-webkit-scrollbar{display:none}
-.seg-scroll .seg{width:max-content}
+.seg-scroll .seg{width:max-content;max-width:none}
 
 /* Buttons */
 .btn{
@@ -240,10 +240,12 @@ button{cursor:pointer}
   background:var(--primary);color:var(--ink);border-radius:20px;padding:14px 14px 14px 18px;
   align-items:center;justify-content:space-between;gap:12px;box-shadow:0 10px 30px rgba(21,19,31,.18);
 }
+.mobile-bar.is-hidden{display:none}
 .mobile-bar__text{display:flex;flex-direction:column;gap:2px;min-width:0}
 .mobile-bar__label{font-size:13px;font-weight:500}
 .mobile-bar__value{font-size:26px;line-height:1;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .mobile-bar__sub{font-size:12px;font-variant-numeric:tabular-nums}
+.mobile-bar__sub span:last-child{white-space:nowrap}
 .mobile-bar a{
   flex:none;min-height:44px;display:flex;align-items:center;padding:0 16px;border-radius:999px;
   background:var(--ink);color:#fff;font-size:14px;font-weight:600;text-decoration:none;
