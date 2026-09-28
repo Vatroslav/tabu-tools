@@ -458,7 +458,14 @@ function fmtRate(bp) {
 
 let advancedOpen = false;
 
+function renderCountryTabs() {
+  const root = $('country-tabs');
+  root.textContent = '';
+  root.append(seg(COUNTRIES, state.country, (c) => { state.country = c; renderInputs(); update(); }, (c) => t(`country_${c}`)));
+}
+
 function renderInputs() {
+  renderCountryTabs();
   const root = $('inputs');
   root.textContent = '';
   const s = state.fields[state.country];
@@ -494,7 +501,6 @@ function renderInputs() {
       'div',
       { class: 'card' },
       el('h2', {}, t('g_calc')),
-      seg(COUNTRIES, country, (c) => { state.country = c; renderInputs(); update(); }, (c) => t(`country_${c}`)),
       seg(DIRECTIONS, state.dir, (d) => { state.dir = d; renderInputs(); update(); }, (d) => t(`dir_${d}`)),
       el(
         'div',

@@ -103,6 +103,15 @@
   .seg button:hover{color:var(--text)}
   .seg button.active{background:var(--lavender);border-color:var(--lavender);color:var(--ink)}
 
+  /* Country switch: top-level tabs above the calculator */
+  .country-tabs{display:flex;justify-content:center;margin:0 0 18px}
+  .country-tabs .seg{
+    display:inline-flex;justify-content:center;gap:2px;margin:0;padding:4px;
+    background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  }
+  .country-tabs .seg button{border:0;background:transparent;padding:9px 18px;font-size:14px}
+  .country-tabs .seg button.active{background:var(--lavender);color:var(--ink)}
+
   .fields{display:grid;grid-template-columns:1fr 1fr;column-gap:26px}
   .field{display:grid;grid-template-columns:1fr 128px;gap:12px;align-items:center;
     padding:6px 0;border-top:1px solid var(--border-subtle)}
@@ -182,6 +191,8 @@
     .fields .field:nth-child(2){border-top:1px solid var(--border-subtle)}
   }
   @media(max-width:860px){
+    .country-tabs .seg{border-radius:16px}
+    .country-tabs .seg button{padding:8px 12px;font-size:13px}
     .grid{grid-template-columns:1fr}
     .results{position:static}
     .hero h1{font-size:23px}
@@ -211,6 +222,8 @@
     <h1 data-i18n="title"></h1>
     <p data-i18n="subtitle"></p>
   </div>
+
+  <div class="country-tabs" id="country-tabs"></div>
 
   <div class="grid">
     <div class="inputs" id="inputs"></div>
