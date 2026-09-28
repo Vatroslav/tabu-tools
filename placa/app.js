@@ -1,6 +1,6 @@
 import { calculate, netToGross, costToGross } from './engine/index.js';
 import { HR_LOCAL_UNITS } from './engine/data-hr-local-units.js';
-import { HR_ASSISTED_AREA_CODES, HR_DZS_NON_TAXABLE } from './engine/params-hr.js';
+import { HR_ASSISTED_AREA_CODES } from './engine/params-hr.js';
 import { fromDecimal } from './engine/money.js';
 import { I18N } from './i18n.js';
 
@@ -444,8 +444,8 @@ function fieldControl(f, s) {
 
 function fieldRow(f, s) {
   const labelKey = f.id;
-  let sub = I18N[lang][`${labelKey}_sub`];
-  if (f.id === 'nonTaxable' && state.country === 'HR') sub = dzsNonTaxableHint();
+  // a jurisdiction-specific hint wins over the generic one
+  const sub = I18N[lang][`${labelKey}_sub_${state.country}`] ?? I18N[lang][`${labelKey}_sub`];
   let hint = null;
   if (f.hint === 'rates') {
     const u = HR_UNITS.get(Number(s.residence));
@@ -454,15 +454,6 @@ function fieldRow(f, s) {
   const label = el('label', { for: `f-${f.id}` }, t(labelKey), sub || hint ? el('span', { class: 'sub' }, sub || hint) : null);
   const cls = `field${f.wide ? ' wide' : ''}${f.span2 ? ' span2' : ''}${f.full ? ' full' : ''}${f.type === 'check' ? ' check' : ''}`;
   return el('div', { class: cls }, label, fieldControl(f, s));
-}
-
-function dzsNonTaxableHint() {
-  const d = HR_DZS_NON_TAXABLE;
-  const [y, mo] = d.month.split('-').map(Number);
-  const whole = (minor) => `${new Intl.NumberFormat(lang === 'hr' ? 'hr-HR' : 'en-GB').format(Math.round(minor / 100))} €`;
-  return t('nonTaxable_sub_HR')
-    .replace('{month}', `${t('months')[mo - 1]} ${y}${lang === 'hr' ? '.' : ''}`)
-    .replace('{perEmployee}', whole(d.perEmployee));
 }
 
 function fmtRate(bp) {

@@ -54,11 +54,3 @@ export const HR_ASSISTED_AREA_CODES = new Set([
   4782, 4855, 4995, 5037, 5061, 5126, 5231, 5665, 5401,
   5185, // Vukovar
 ]);
-
-// Average non-taxable receipts paid in a month, Državni zavod za statistiku,
-// release RAD-2026-1-1/7 (22.9.2026), table 4. Shown as guidance only.
-export const HR_DZS_NON_TAXABLE = {
-  month: '2026-07',
-  perRecipient: 26900, // per employee who received a non-taxable payment
-  perEmployee: 18200, // per employee who received a salary
-};
