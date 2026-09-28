@@ -456,6 +456,22 @@ function fieldRow(f, s) {
   return el('div', { class: cls }, label, fieldControl(f, s));
 }
 
+function periodOptions() {
+  const out = [];
+  let [y, m] = PERIOD_MIN.split('-').map(Number);
+  for (;;) {
+    const value = `${y}-${String(m).padStart(2, '0')}`;
+    if (value > PERIOD_MAX) break;
+    out.push([value, `${t('monthNames')[m - 1]} ${y}${lang === 'hr' ? '.' : ''}`]);
+    m += 1;
+    if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+  }
+  return out;
+}
+
 function fmtRate(bp) {
   return new Intl.NumberFormat(lang === 'hr' ? 'hr-HR' : 'en-GB', { maximumFractionDigits: 2 }).format(bp / 100);
 }
@@ -488,17 +504,18 @@ function renderInputs() {
       update();
     },
   });
-  const periodInput = el('input', {
-    id: 'f-period',
-    type: 'month',
-    min: PERIOD_MIN,
-    max: PERIOD_MAX,
-    value: state.period,
-    onchange: (e) => {
-      if (e.target.value) state.period = e.target.value;
-      update();
+  // A select instead of <input type="month">: the native picker follows the browser's language, not the page's.
+  const periodInput = el(
+    'select',
+    {
+      id: 'f-period',
+      onchange: (e) => {
+        state.period = e.target.value;
+        update();
+      },
     },
-  });
+    ...periodOptions().map(([value, label]) => el('option', { value, selected: value === state.period }, label)),
+  );
 
   root.append(
     el(
