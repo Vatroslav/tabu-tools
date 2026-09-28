@@ -1,6 +1,6 @@
 import { calculate, netToGross, costToGross } from './engine/index.js';
 import { HR_LOCAL_UNITS } from './engine/data-hr-local-units.js';
-import { HR_ASSISTED_AREA_CODES } from './engine/params-hr.js';
+import { HR_ASSISTED_AREA_CODES, HR_DZS_NON_TAXABLE } from './engine/params-hr.js';
 import { fromDecimal } from './engine/money.js';
 import { I18N } from './i18n.js';
 
@@ -23,7 +23,7 @@ const RERENDER_ON = new Set(['residence', 'employerIncentive']);
 
 const FIELDS = {
   HR: [
-    select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, span2: true, hint: 'rates' }),
+    select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, span3: true, hint: 'rates' }),
     int('children', 'basic', 0, 0, 9),
     int('dependents', 'basic', 0, 0, 20),
     check('assistedArea', 'person', false, { showIf: (s) => HR_ASSISTED_AREA_CODES.has(Number(s.residence)) }),
@@ -45,7 +45,7 @@ const FIELDS = {
     check('legacyYouthExemption', 'employer'),
     check('fallenDefenderChild', 'employer'),
     select('extendedService', 'employer', '', EXTENDED),
-    money('nonTaxable', 'employer'),
+    money('nonTaxable', 'basic'),
   ],
   SRB: [
     int('workShare', 'basic', 100, 1, 100, { affix: '%' }),
@@ -66,7 +66,7 @@ const FIELDS = {
       showIf: (s) => s.employerIncentive === 'newHire',
     }),
     select('extendedService', 'employer', '', EXTENDED),
-    money('nonTaxable', 'employer'),
+    money('nonTaxable', 'basic'),
   ],
   FBIH: [
     check('taxCard', 'basic', true),
@@ -79,7 +79,7 @@ const FIELDS = {
     select('extendedService', 'employer', '', ['', '12/14', '12/15', '12/16']),
     check('disabilityFundSmall', 'employer'),
     money('workerAid', 'employer'),
-    money('nonTaxable', 'employer'),
+    money('nonTaxable', 'basic'),
   ],
   RSBIH: [
     select('jobCategory', 'basic', 'secondary4', ['none', 'secondary3', 'secondary4', 'higher', 'university'], { wide: true }),
@@ -93,7 +93,7 @@ const FIELDS = {
     check('taxCard', 'job', true),
     select('disabilityFund', 'employer', '', ['', 'private', 'public'], { wide: true }),
     money('previousGross', 'employer'),
-    money('nonTaxable', 'employer'),
+    money('nonTaxable', 'basic'),
   ],
   BD: [
     select('pensionFund', 'basic', 'RS', ['RS', 'FBIH']),
@@ -105,7 +105,7 @@ const FIELDS = {
     int('permanentlyDisabledMembers', 'person', 0, 0, 20),
     check('businessEmployer', 'employer', true),
     check('disabilityFundBD', 'employer'),
-    money('nonTaxable', 'employer'),
+    money('nonTaxable', 'basic'),
   ],
 };
 
@@ -444,15 +444,26 @@ function fieldControl(f, s) {
 
 function fieldRow(f, s) {
   const labelKey = f.id;
-  const sub = I18N[lang][`${labelKey}_sub`];
+  let sub = I18N[lang][`${labelKey}_sub`];
+  if (f.id === 'nonTaxable' && state.country === 'HR') sub = dzsNonTaxableHint();
   let hint = null;
   if (f.hint === 'rates') {
     const u = HR_UNITS.get(Number(s.residence));
     if (u) hint = t('rates_hint').replace('{lower}', fmtRate(u[2])).replace('{higher}', fmtRate(u[3]));
   }
   const label = el('label', { for: `f-${f.id}` }, t(labelKey), sub || hint ? el('span', { class: 'sub' }, sub || hint) : null);
-  const cls = `field${f.wide ? ' wide' : ''}${f.span2 ? ' span2' : ''}${f.type === 'check' ? ' check' : ''}`;
+  const cls = `field${f.wide ? ' wide' : ''}${f.span3 ? ' span3' : ''}${f.type === 'check' ? ' check' : ''}`;
   return el('div', { class: cls }, label, fieldControl(f, s));
+}
+
+function dzsNonTaxableHint() {
+  const d = HR_DZS_NON_TAXABLE;
+  const [y, mo] = d.month.split('-').map(Number);
+  const whole = (minor) => `${new Intl.NumberFormat(lang === 'hr' ? 'hr-HR' : 'en-GB').format(Math.round(minor / 100))} €`;
+  return t('nonTaxable_sub_HR')
+    .replace('{month}', `${t('months')[mo - 1]} ${y}.`)
+    .replace('{perRecipient}', whole(d.perRecipient))
+    .replace('{perEmployee}', whole(d.perEmployee));
 }
 
 function fmtRate(bp) {
