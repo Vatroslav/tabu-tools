@@ -21,6 +21,17 @@ export function applyRate(amount, bp) {
   return mulDiv(amount, bp, 10000);
 }
 
+// Applies each named rate to the same base, rounding every item separately.
+export function rateItems(base, rates) {
+  const out = {};
+  for (const [k, bp] of Object.entries(rates)) out[k] = applyRate(base, bp);
+  return out;
+}
+
+export function sumValues(obj) {
+  return Object.values(obj).reduce((a, b) => a + b, 0);
+}
+
 // Picks the parameter set in force for a 'YYYY-MM' period.
 // Periods after the last known set reuse it and are flagged as provisional.
 export function pickParams(sets, period) {

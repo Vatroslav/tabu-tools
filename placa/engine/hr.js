@@ -23,6 +23,7 @@ const DEFAULTS = {
   extendedService: null, // '12/14' | '12/15' | '12/16' | '12/18'
   birthYear: null, // for the annual youth refund estimate
   returnee: false, // ZPD čl. 46 st. 3, annual refund
+  nonTaxable: 0, // non-taxable receipts (meal allowance, gifts...) added to the payout
 };
 
 function normalize(input) {
@@ -176,7 +177,7 @@ export function calculateHR(input, overrides = null) {
       ? applyRate(pensionBase, withPillar2) + applyRate(pensionBase, pillar2Part)
       : applyRate(pensionBase, onlyPillar1);
   }
-  const employerCost = gross + health + extended;
+  const employerCost = gross + health + extended + i.nonTaxable;
 
   if (gross < mulDiv(p.minimumWage, i.weeklyHours, 40)) notes.push('belowMinimumWage');
 
@@ -187,7 +188,9 @@ export function calculateHR(input, overrides = null) {
     provisional,
     gross,
     net,
+    payout: net + i.nonTaxable,
     employerCost,
+    effectiveEmployerCost: employerCost,
     items: {
       contributionBase: base,
       lowWageRelief: relief,
