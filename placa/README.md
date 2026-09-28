@@ -14,9 +14,3 @@ Gross to net, net to gross and employer cost for Croatia, Serbia and Bosnia and 
 2. Croatia: download the Tax Administration's local rate table for the new year and run
    `python tools/build_hr_local_units.py <table.xlsx> <YYYY-MM>`.
 3. Add the new published examples to `test/` and run the tests.
-
-## Monthly update
-
-- Croatia: `HR_DZS_NON_TAXABLE` in `engine/params-hr.js` holds the average non-taxable receipts
-  from the latest DZS release on average wages (table 4); the July 2026 figures were
-  published on 22 September 2026.

@@ -109,9 +109,11 @@ const HR = {
   extendedService_FBIH_12_16: 'više od 15',
   nonTaxable: 'Neoporezivi primici',
   nonTaxable_sub: 'Topli obrok, prijevoz, nagrade u zakonskim iznosima',
-  nonTaxable_sub_HR: 'U {month} zaposleni su u prosjeku dobili {perEmployee} neoporezivih primitaka (DZS).',
-  // locative: "u srpnju"
-  months: ['siječnju', 'veljači', 'ožujku', 'travnju', 'svibnju', 'lipnju', 'srpnju', 'kolovozu', 'rujnu', 'listopadu', 'studenome', 'prosincu'],
+  nonTaxable_sub_HR: 'Topli obrok, prijevoz, regres, božićnica, nagrada za radne rezultate, dar djetetu, do zakonskih iznosa',
+  nonTaxable_sub_SRB: 'Prijevoz, dnevnice, jubilarna nagrada, poklon djetetu, solidarna pomoć. Topli obrok i regres dio su bruta.',
+  nonTaxable_sub_FBIH: 'Topli obrok, prijevoz, regres, pokloni, pomoć do 300 KM, do zakonskih iznosa',
+  nonTaxable_sub_RSBIH: 'Prijevoz, topli obrok u naravi, pokloni djeci. Topli obrok u novcu i regres dio su bruta.',
+  nonTaxable_sub_BD: 'Topli obrok do 10 KM dnevno, prijevoz, pokloni za praznike',
 
   workShare: 'Radno vrijeme (% punog)',
   multipleEmployers: 'Nepuno vrijeme kod više poslodavaca',
@@ -355,8 +357,11 @@ const EN = {
   extendedService_FBIH_12_16: 'more than 15',
   nonTaxable: 'Non-taxable payments',
   nonTaxable_sub: 'Meal allowance, transport, bonuses within statutory limits',
-  nonTaxable_sub_HR: 'In {month} employees received {perEmployee} in non-taxable payments on average (DZS).',
-  months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  nonTaxable_sub_HR: 'Meal allowance, commuting, holiday pay, Christmas bonus, performance bonus, gift for a child, within statutory limits',
+  nonTaxable_sub_SRB: 'Commuting, per diems, long-service award, gift for a child, solidarity aid. Meal allowance and holiday pay are part of gross.',
+  nonTaxable_sub_FBIH: 'Meal allowance, commuting, holiday pay, gifts, worker aid up to 300 KM, within statutory limits',
+  nonTaxable_sub_RSBIH: 'Commuting, meals provided in kind, gifts for children. Cash meal allowance and holiday pay are part of gross.',
+  nonTaxable_sub_BD: 'Meal allowance up to 10 KM a day, commuting, holiday gifts',
 
   workShare: 'Working time (% of full time)',
   multipleEmployers: 'Part time with several employers',
