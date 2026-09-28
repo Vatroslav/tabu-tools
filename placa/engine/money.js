@@ -32,6 +32,7 @@ export function pickParams(sets, period) {
   if (!chosen) {
     throw new RangeError(`No parameters for period ${period}`);
   }
-  const provisional = Boolean(chosen.validTo && period > chosen.validTo);
+  // A set can itself be provisional when some of its values are not yet published.
+  const provisional = Boolean(chosen.provisional || (chosen.validTo && period > chosen.validTo));
   return { params: chosen, provisional };
 }

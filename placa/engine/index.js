@@ -1,9 +1,11 @@
 // Entry point: forward calculation per jurisdiction plus generic inverse helpers.
 import { calculateHR } from './hr.js';
+import { calculateSRB } from './srb.js';
 import { solveSmallest } from './solve.js';
 
 export const ENGINES = {
   HR: calculateHR,
+  SRB: calculateSRB,
 };
 
 export function calculate(country, input) {
