@@ -24,7 +24,6 @@ const RERENDER_ON = new Set(['residence', 'employerIncentive']);
 const FIELDS = {
   HR: [
     select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, hint: 'rates' }),
-    check('pillar2', 'basic', true),
     int('children', 'basic', 0, 0, 9),
     int('dependents', 'basic', 0, 0, 20),
     check('assistedArea', 'person', false, { showIf: (s) => HR_ASSISTED_AREA_CODES.has(Number(s.residence)) }),
@@ -40,6 +39,7 @@ const FIELDS = {
     int('allowanceShare', 'job', 100, 0, 100, { affix: '%' }),
     money('totalGross', 'job'),
     check('boardMember', 'job'),
+    check('pillar1Only', 'job'),
     check('insuredAbroad', 'job'),
     check('firstEmployment', 'employer'),
     check('legacyYouthExemption', 'employer'),
@@ -126,7 +126,7 @@ const TO_INPUT = {
     }
     return {
       rates: { lowerBp: unit[2], higherBp: unit[3] },
-      pillar2: s.pillar2,
+      pillar2: !s.pillar1Only,
       children,
       dependents,
       disability: s.disability,
@@ -346,6 +346,8 @@ for (const c of COUNTRIES) {
   state.fields[c] = defaultsFor(c);
 }
 if (params.has('a') && !Number.isNaN(Number(params.get('a')))) state.amount[state.country] = Number(params.get('a'));
+// Links created before the pillar field was inverted carry pillar2=0.
+if (params.get('pillar2') === '0') state.fields.HR.pillar1Only = true;
 for (const f of FIELDS[state.country]) {
   if (!params.has(f.id)) continue;
   const raw = params.get(f.id);

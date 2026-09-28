@@ -68,7 +68,8 @@ const HR = {
 
   residence: 'Prebivalište (grad ili općina)',
   rates_hint: 'Stope poreza: {lower} % i {higher} %',
-  pillar2: 'Član II. mirovinskog stupa',
+  pillar1Only: 'Samo I. mirovinski stup',
+  pillar1Only_sub: 'Prvo zaposlenje u Hrvatskoj s 40 ili više godina, bez ulaska u II. stup',
   children: 'Uzdržavana djeca',
   dependents: 'Ostali uzdržavani članovi',
   assistedArea: 'Stvarno živim na tom području (oznaka P1)',
@@ -310,7 +311,8 @@ const EN = {
 
   residence: 'Place of residence',
   rates_hint: 'Tax rates: {lower} % and {higher} %',
-  pillar2: 'Member of pension pillar II',
+  pillar1Only: 'Pension pillar I only',
+  pillar1Only_sub: 'First employed in Croatia at 40 or older, without joining pillar II',
   children: 'Dependent children',
   dependents: 'Other dependants',
   assistedArea: 'I actually live in this area (P1 on the tax card)',
