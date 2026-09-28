@@ -23,7 +23,7 @@ const RERENDER_ON = new Set(['residence', 'employerIncentive']);
 
 const FIELDS = {
   HR: [
-    select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, span3: true, hint: 'rates' }),
+    select('residence', 'basic', '1333', () => HR_LOCAL_UNITS.map((u) => [String(u[0]), u[1]]), { wide: true, span2: true, hint: 'rates' }),
     int('children', 'basic', 0, 0, 9),
     int('dependents', 'basic', 0, 0, 20),
     check('assistedArea', 'person', false, { showIf: (s) => HR_ASSISTED_AREA_CODES.has(Number(s.residence)) }),
@@ -45,7 +45,7 @@ const FIELDS = {
     check('legacyYouthExemption', 'employer'),
     check('fallenDefenderChild', 'employer'),
     select('extendedService', 'employer', '', EXTENDED),
-    money('nonTaxable', 'basic'),
+    money('nonTaxable', 'calc', { full: true }),
   ],
   SRB: [
     int('workShare', 'basic', 100, 1, 100, { affix: '%' }),
@@ -66,7 +66,7 @@ const FIELDS = {
       showIf: (s) => s.employerIncentive === 'newHire',
     }),
     select('extendedService', 'employer', '', EXTENDED),
-    money('nonTaxable', 'basic'),
+    money('nonTaxable', 'calc', { full: true }),
   ],
   FBIH: [
     check('taxCard', 'basic', true),
@@ -79,7 +79,7 @@ const FIELDS = {
     select('extendedService', 'employer', '', ['', '12/14', '12/15', '12/16']),
     check('disabilityFundSmall', 'employer'),
     money('workerAid', 'employer'),
-    money('nonTaxable', 'basic'),
+    money('nonTaxable', 'calc', { full: true }),
   ],
   RSBIH: [
     select('jobCategory', 'basic', 'secondary4', ['none', 'secondary3', 'secondary4', 'higher', 'university'], { wide: true }),
@@ -93,10 +93,10 @@ const FIELDS = {
     check('taxCard', 'job', true),
     select('disabilityFund', 'employer', '', ['', 'private', 'public'], { wide: true }),
     money('previousGross', 'employer'),
-    money('nonTaxable', 'basic'),
+    money('nonTaxable', 'calc', { full: true }),
   ],
   BD: [
-    select('pensionFund', 'basic', 'RS', ['RS', 'FBIH']),
+    select('pensionFund', 'basic', 'RS', ['RS', 'FBIH'], { wide: true }),
     check('taxCard', 'basic', true),
     check('entityResident', 'basic'),
     check('spouse', 'basic'),
@@ -105,7 +105,7 @@ const FIELDS = {
     int('permanentlyDisabledMembers', 'person', 0, 0, 20),
     check('businessEmployer', 'employer', true),
     check('disabilityFundBD', 'employer'),
-    money('nonTaxable', 'basic'),
+    money('nonTaxable', 'calc', { full: true }),
   ],
 };
 
@@ -452,7 +452,7 @@ function fieldRow(f, s) {
     if (u) hint = t('rates_hint').replace('{lower}', fmtRate(u[2])).replace('{higher}', fmtRate(u[3]));
   }
   const label = el('label', { for: `f-${f.id}` }, t(labelKey), sub || hint ? el('span', { class: 'sub' }, sub || hint) : null);
-  const cls = `field${f.wide ? ' wide' : ''}${f.span3 ? ' span3' : ''}${f.type === 'check' ? ' check' : ''}`;
+  const cls = `field${f.wide ? ' wide' : ''}${f.span2 ? ' span2' : ''}${f.full ? ' full' : ''}${f.type === 'check' ? ' check' : ''}`;
   return el('div', { class: cls }, label, fieldControl(f, s));
 }
 
@@ -531,6 +531,7 @@ function renderInputs() {
           el('label', { for: 'f-period' }, t('period'), el('span', { class: 'sub' }, t('period_hint'))),
           periodInput,
         ),
+        ...FIELDS[country].filter((f) => f.group === 'calc').map((f) => fieldRow(f, s)),
       ),
     ),
   );
