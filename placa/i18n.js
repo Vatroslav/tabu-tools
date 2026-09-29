@@ -289,6 +289,7 @@ const HR = {
   s_pensionHR: 'Mirovinsko (I. + II. stup)',
   s_employee: 'Doprinosi radnika',
   s_employer: 'Doprinosi poslodavca',
+  cta: 'Radiš u IT i želiš usporediti svoju plaću s drugima? Posjeti našu aplikaciju',
 
   footer_author: 'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
   footer_contact: 'Pitanja ili povratne informacije? Piši mi na',
@@ -543,6 +544,7 @@ const EN = {
   s_pensionHR: 'Pension (pillars I and II)',
   s_employee: 'Employee contributions',
   s_employer: 'Employer contributions',
+  cta: 'Work in IT and want to compare your salary with others? Visit our app',
 
   footer_author: 'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
   footer_contact: 'Questions or feedback? Reach me at',
