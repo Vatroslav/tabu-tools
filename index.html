@@ -32,8 +32,6 @@
   .home-header__title h1{font-size:clamp(28px,4vw,40px);line-height:1.1;font-weight:600;letter-spacing:-.03em;text-wrap:balance}
   .home-header__title p{font-size:clamp(15px,1.6vw,18px);line-height:1.5;color:var(--text-muted)}
   .home-header__right{display:flex;align-items:center;gap:20px}
-  .home-header__right .site-link{font-size:14px;color:var(--text-secondary);text-decoration:none}
-  .home-header__right .site-link:hover{color:var(--text)}
   .home-header__right .lang-toggle{margin-left:-12px}
 
   .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:16px}
@@ -153,11 +151,12 @@
   </section>
 
   <footer class="site-footer">
-    <span data-i18n="footer_author">Izradio Vatroslav Mileusnić, suosnivač Tabua.</span>
+    <span data-i18n="footer_author">Izradio i održava Tabu.</span>
     <span><span data-i18n="footer_contact">Pitanja ili povratne informacije? Piši mi na</span> <a href="mailto:vatroslav@tabu.hr">vatroslav@tabu.hr</a></span>
   </footer>
 </div>
 
+<script src="/assets/lang.js"></script>
 <script src="/assets/theme.js"></script>
 <script>
 const I18N = {
@@ -177,7 +176,7 @@ const I18N = {
     app_private_desc: 'Usporedi svoju plaću s kolegama na istoj poziciji.',
     app_business_title: 'Tabu za poslovne korisnike',
     app_business_desc: 'Usporedi plaće u svojoj tvrtki s tržištem i konkurencijom.',
-    footer_author: 'Izradio Vatroslav Mileusnić, suosnivač Tabua.',
+    footer_author: 'Izradio i održava Tabu.',
     footer_contact: 'Pitanja ili povratne informacije? Piši mi na',
   },
   en: {
@@ -196,19 +195,12 @@ const I18N = {
     app_private_desc: 'Compare your salary with peers in the same role.',
     app_business_title: 'Tabu for business',
     app_business_desc: 'Compare salaries in your company with the market and competitors.',
-    footer_author: 'Built by Vatroslav Mileusnić, Co-Founder of Tabu.',
+    footer_author: 'Built and maintained by Tabu.',
     footer_contact: 'Questions or feedback? Reach me at',
   },
 };
 
-// Language: ?lang=hr|en, else browser language (Croatian, Serbian, Bosnian -> HR; Montenegro and anything else -> EN)
-function initialLang(){
-  const p = new URLSearchParams(location.search).get('lang');
-  if(p==='hr' || p==='en') return p;
-  const parts = (navigator.language||'').toLowerCase().split('-');
-  return ['hr','sr','bs','sh'].includes(parts[0]) && !parts.includes('me') ? 'hr' : 'en';
-}
-let lang = initialLang();
+let lang = window.tabuLang.initial();
 
 function applyLang(){
   const t = I18N[lang];
@@ -228,6 +220,7 @@ function applyLang(){
 document.querySelectorAll('.lang-toggle button').forEach(b => {
   b.addEventListener('click', () => {
     lang = b.dataset.lang;
+    window.tabuLang.save(lang);
     const u = new URL(location.href); u.searchParams.set('lang', lang);
     history.replaceState(null, '', u);
     applyLang();

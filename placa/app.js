@@ -325,15 +325,8 @@ function defaultsFor(country) {
   return s;
 }
 
-function initialLang(params) {
-  const p = params.get('lang');
-  if (p === 'hr' || p === 'en') return p;
-  const parts = (navigator.language || '').toLowerCase().split('-');
-  return ['hr', 'sr', 'bs', 'sh'].includes(parts[0]) && !parts.includes('me') ? 'hr' : 'en';
-}
-
 const params = new URLSearchParams(location.search);
-let lang = initialLang(params);
+let lang = window.tabuLang.initial();
 const state = {
   country: COUNTRIES.includes(params.get('c')) ? params.get('c') : 'HR',
   dir: DIRECTIONS.includes(params.get('d')) ? params.get('d') : 'g2n',
@@ -787,6 +780,7 @@ function applyLang() {
 document.querySelectorAll('.lang-toggle button').forEach((b) => {
   b.addEventListener('click', () => {
     lang = b.dataset.lang;
+    window.tabuLang.save(lang);
     const u = new URL(location.href);
     u.searchParams.set('lang', lang);
     history.replaceState(null, '', u);
