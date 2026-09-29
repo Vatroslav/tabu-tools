@@ -221,8 +221,6 @@ document.querySelectorAll('.lang-toggle button').forEach(b => {
   b.addEventListener('click', () => {
     lang = b.dataset.lang;
     window.tabuLang.save(lang);
-    const u = new URL(location.href); u.searchParams.set('lang', lang);
-    history.replaceState(null, '', u);
     applyLang();
   });
 });
