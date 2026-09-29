@@ -1,4 +1,4 @@
-// Page language. Order: ?lang=hr|en in the URL, the choice saved from the toggle,
+// Page language. Order: ?lang=hr|en in the URL (incoming links only), the choice saved from the toggle,
 // then the browser language (Croatian, Serbian, Bosnian -> HR; Montenegro and anything else -> EN).
 (function () {
   const KEY = 'tabu-lang';
@@ -22,6 +22,12 @@
       localStorage.setItem(KEY, lang);
     } catch {
       /* storage unavailable: the choice lasts for this page only */
+    }
+    // Drop ?lang= from the address so it cannot override the saved choice on reload
+    const u = new URL(location.href);
+    if (u.searchParams.has('lang')) {
+      u.searchParams.delete('lang');
+      history.replaceState(null, '', u);
     }
   }
 
