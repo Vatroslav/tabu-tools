@@ -6,14 +6,20 @@
 <title>Kalkulator plaće bruto-neto | Tabu</title>
 <meta name="description" content="Izračun plaće bruto u neto, neto u bruto i troška poslodavca za Hrvatsku, Srbiju, te Bosnu i Hercegovinu, s poreznim olakšicama.">
 <link rel="canonical" href="https://kalkulator.tabu.hr/placa/">
+<link rel="alternate" hreflang="hr" href="https://kalkulator.tabu.hr/placa/">
+<link rel="alternate" hreflang="sr" href="https://kalkulator.tabu.hr/placa/">
+<link rel="alternate" hreflang="bs" href="https://kalkulator.tabu.hr/placa/">
+<link rel="alternate" hreflang="en" href="https://kalkulator.tabu.hr/en/placa/">
+<link rel="alternate" hreflang="sr-ME" href="https://kalkulator.tabu.hr/en/placa/">
+<link rel="alternate" hreflang="x-default" href="https://kalkulator.tabu.hr/en/placa/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tabu">
 <meta property="og:url" content="https://kalkulator.tabu.hr/placa/">
 <meta property="og:title" content="Kalkulator plaće bruto-neto | Tabu">
 <meta property="og:description" content="Bruto u neto, neto u bruto i trošak poslodavca za Hrvatsku, Srbiju i BiH.">
 <meta name="twitter:card" content="summary">
-<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
-<link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script>(function(){var t;try{t=localStorage.getItem('tabu-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script>
 <script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
 <script>
@@ -92,7 +98,7 @@
           <path d="M2873.8 719.947C2790.9 719.947 2719.85 706.783 2658 677.822C2597.47 650.178 2551.41 610.687 2518.52 558.031C2485.62 505.376 2469.83 456.785 2469.83 385.701L2469.83 0L2671.16 1.76007e-05L2671.16 322.838C2671.16 387.341 2689.58 437.363 2725.11 474.222C2761.95 509.764 2810.64 528.194 2873.8 528.194C2935.65 528.194 2985.65 509.764 3021.18 474.222C3056.71 437.363 3075.13 387.341 3075.13 322.838L3075.13 5.29172e-05L3276.46 7.05179e-05L3276.46 385.701C3276.46 456.786 3260.67 505.376 3227.77 558.031C3196.19 610.687 3148.82 650.178 3088.29 677.822C3027.76 706.783 2955.39 719.947 2873.8 719.947Z" fill="currentColor"/>
         </svg>
       </a>
-      <a class="back" href="https://kalkulator.tabu.hr/" data-i18n="back"></a>
+      <a class="back" href="https://kalkulator.tabu.hr/" data-i18n="back">← Svi kalkulatori</a>
     </div>
     <div class="site-header__right">
       <a class="site-link" href="https://www.tabu.hr">tabu.hr</a>
@@ -109,8 +115,8 @@
 
   <div class="title-block">
     <div class="intro">
-      <h1 data-i18n="title"></h1>
-      <p data-i18n="subtitle"></p>
+      <h1 data-i18n="title">Kalkulator plaće</h1>
+      <p data-i18n="subtitle">Bruto u neto, neto u bruto i trošak poslodavca za Hrvatsku, Srbiju, te Bosnu i Hercegovinu, s poreznim olakšicama.</p>
     </div>
     <div class="seg-scroll" id="country-tabs"></div>
   </div>
@@ -122,17 +128,17 @@
       <div class="card results-card">
         <div id="results"></div>
         <div class="actions">
-          <button class="btn btn-primary" id="copy" type="button" data-i18n="copy_link"></button>
-          <button class="btn btn-ghost" id="reset" type="button" data-i18n="reset"></button>
+          <button class="btn btn-primary" id="copy" type="button" data-i18n="copy_link">Kopiraj link na izračun</button>
+          <button class="btn btn-ghost" id="reset" type="button" data-i18n="reset">Vrati na zadane vrijednosti</button>
         </div>
       </div>
-      <a class="cta" href="https://app.tabu.hr/?utm_source=kalkulator&amp;utm_medium=cta&amp;utm_campaign=placa" target="_blank" rel="noopener"><span data-i18n="cta"></span><span aria-hidden="true">→</span></a>
+      <a class="cta" href="https://app.tabu.hr/?utm_source=kalkulator&amp;utm_medium=cta&amp;utm_campaign=placa" target="_blank" rel="noopener"><span data-i18n="cta">Radiš u IT i želiš usporediti svoju plaću s drugima? Posjeti našu aplikaciju</span><span aria-hidden="true">→</span></a>
     </aside>
   </div>
 
   <footer class="site-footer">
-    <span data-i18n="footer_author"></span>
-    <span><span data-i18n="footer_contact"></span> <a href="mailto:vatroslav@tabu.hr">vatroslav@tabu.hr</a></span>
+    <span data-i18n="footer_author">Izradio i održava Tabu.</span>
+    <span><span data-i18n="footer_contact">Pitanja ili povratne informacije? Piši mi na</span> <a href="mailto:vatroslav@tabu.hr">vatroslav@tabu.hr</a></span>
   </footer>
 </div>
 
@@ -142,7 +148,7 @@
     <span class="mobile-bar__value" id="mb-value"></span>
     <span class="mobile-bar__sub" id="mb-sub"></span>
   </div>
-  <a href="#razrada" data-i18n="details"></a>
+  <a href="#razrada" data-i18n="details">Razrada ↓</a>
 </div>
 
 <script src="/assets/lang.js"></script>

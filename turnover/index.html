@@ -6,14 +6,20 @@
 <title>Kalkulator troška odlaska zaposlenika | Tabu</title>
 <meta name="description" content="Procijeni stvarni trošak odlaska zaposlenika - prazna pozicija, zapošljavanje, onboarding i ostalo.">
 <link rel="canonical" href="https://kalkulator.tabu.hr/turnover/">
+<link rel="alternate" hreflang="hr" href="https://kalkulator.tabu.hr/turnover/">
+<link rel="alternate" hreflang="sr" href="https://kalkulator.tabu.hr/turnover/">
+<link rel="alternate" hreflang="bs" href="https://kalkulator.tabu.hr/turnover/">
+<link rel="alternate" hreflang="en" href="https://kalkulator.tabu.hr/en/turnover/">
+<link rel="alternate" hreflang="sr-ME" href="https://kalkulator.tabu.hr/en/turnover/">
+<link rel="alternate" hreflang="x-default" href="https://kalkulator.tabu.hr/en/turnover/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tabu">
 <meta property="og:url" content="https://kalkulator.tabu.hr/turnover/">
 <meta property="og:title" content="Kalkulator troška odlaska zaposlenika | Tabu">
 <meta property="og:description" content="Procijeni stvarni trošak odlaska zaposlenika - prazna pozicija, zapošljavanje, onboarding i ostalo.">
 <meta name="twitter:card" content="summary">
-<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
-<link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script>(function(){var t;try{t=localStorage.getItem('tabu-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script>
 <script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
 <script>
@@ -71,7 +77,7 @@
           <path d="M2873.8 719.947C2790.9 719.947 2719.85 706.783 2658 677.822C2597.47 650.178 2551.41 610.687 2518.52 558.031C2485.62 505.376 2469.83 456.785 2469.83 385.701L2469.83 0L2671.16 1.76007e-05L2671.16 322.838C2671.16 387.341 2689.58 437.363 2725.11 474.222C2761.95 509.764 2810.64 528.194 2873.8 528.194C2935.65 528.194 2985.65 509.764 3021.18 474.222C3056.71 437.363 3075.13 387.341 3075.13 322.838L3075.13 5.29172e-05L3276.46 7.05179e-05L3276.46 385.701C3276.46 456.786 3260.67 505.376 3227.77 558.031C3196.19 610.687 3148.82 650.178 3088.29 677.822C3027.76 706.783 2955.39 719.947 2873.8 719.947Z" fill="currentColor"/>
         </svg>
       </a>
-      <a class="back" href="https://kalkulator.tabu.hr/" data-i18n="back"></a>
+      <a class="back" href="https://kalkulator.tabu.hr/" data-i18n="back">← Svi kalkulatori</a>
     </div>
     <div class="site-header__right">
       <a class="site-link" href="https://www.tabu.hr">tabu.hr</a>
@@ -87,8 +93,8 @@
   </header>
 
   <div class="intro">
-    <h1 data-i18n="title"></h1>
-    <p data-i18n="subtitle"></p>
+    <h1 data-i18n="title">Kalkulator troška odlaska zaposlenika</h1>
+    <p data-i18n="subtitle">Gubitak zaposlenika košta puno više od zadnje plaće. Unesi svoje brojke - ili ostavi zadane - da procijeniš stvarni trošak zamjene osobe.</p>
   </div>
 
   <div class="workbench">
@@ -97,11 +103,11 @@
     <aside class="workbench__aside" id="razrada">
       <div class="tile">
         <div class="tile__main">
-          <span class="tile__label" data-i18n="r_total"></span>
+          <span class="tile__label" data-i18n="r_total">Ukupni trošak odlaska</span>
           <span class="tile__value" id="out-total">—</span>
         </div>
         <div class="mini mini--row">
-          <span class="mini__label" data-i18n="r_total_chance"></span>
+          <span class="mini__label" data-i18n="r_total_chance">Uvećan za šansu ranog odlaska</span>
           <span class="mini__value" id="out-total-chance">—</span>
         </div>
       </div>
@@ -114,40 +120,40 @@
             <span id="bar-hire" style="background:var(--lime)"></span>
           </div>
           <div class="split__legend split__legend--stack">
-            <span class="split__item"><i style="background:var(--primary)"></i><span data-i18n="p_vacancy"></span><span class="v" id="out-vacancy">—</span></span>
-            <span class="split__item"><i style="background:var(--salmon)"></i><span data-i18n="p_spent"></span><span class="v" id="out-spent">—</span></span>
-            <span class="split__item"><i style="background:var(--lime)"></i><span data-i18n="p_hire"></span><span class="v" id="out-hire">—</span></span>
+            <span class="split__item"><i style="background:var(--primary)"></i><span data-i18n="p_vacancy">Prazna pozicija</span><span class="v" id="out-vacancy">—</span></span>
+            <span class="split__item"><i style="background:var(--salmon)"></i><span data-i18n="p_spent">Već uloženo u osobu koja odlazi</span><span class="v" id="out-spent">—</span></span>
+            <span class="split__item"><i style="background:var(--lime)"></i><span data-i18n="p_hire">Zapošljavanje zamjene</span><span class="v" id="out-hire">—</span></span>
           </div>
         </div>
         <div class="breakdown">
-          <span class="group-label" data-i18n="r_hiring_breakdown"></span>
-          <div class="row"><span data-i18n="r_hiring_new"></span><span class="v" id="out-hiring-new">—</span></div>
-          <div class="row"><span data-i18n="r_onboarding_salary"></span><span class="v" id="out-onboarding">—</span></div>
-          <div class="row total"><span data-i18n="r_hiring_total"></span><span class="v" id="out-hiring-total">—</span></div>
-          <div class="row"><span data-i18n="r_hiring_chance"></span><span class="v" id="out-hiring-chance">—</span></div>
+          <span class="group-label" data-i18n="r_hiring_breakdown">Razrada zapošljavanja</span>
+          <div class="row"><span data-i18n="r_hiring_new">Trošak zapošljavanja novog zaposlenika</span><span class="v" id="out-hiring-new">—</span></div>
+          <div class="row"><span data-i18n="r_onboarding_salary">Plaća tijekom onboardinga</span><span class="v" id="out-onboarding">—</span></div>
+          <div class="row total"><span data-i18n="r_hiring_total">Ukupni trošak zapošljavanja</span><span class="v" id="out-hiring-total">—</span></div>
+          <div class="row"><span data-i18n="r_hiring_chance">Trošak zapošljavanja uvećan za rani odlazak</span><span class="v" id="out-hiring-chance">—</span></div>
         </div>
-        <a class="cta" id="cta" href="https://www.tabu.hr/poslovni" target="_blank" rel="noopener"><span data-i18n="cta"></span><span aria-hidden="true">→</span></a>
-        <button class="btn btn-ghost" id="reset" type="button" data-i18n="reset"></button>
+        <a class="cta" id="cta" href="https://www.tabu.hr/poslovni" target="_blank" rel="noopener"><span data-i18n="cta">Pogledaj kako Tabu pomaže tvojem poslovanju</span><span aria-hidden="true">→</span></a>
+        <button class="btn btn-ghost" id="reset" type="button" data-i18n="reset">Vrati na zadane vrijednosti</button>
       </div>
     </aside>
   </div>
 
   <footer class="site-footer">
     <div class="site-footer__left">
-      <a href="https://docs.google.com/spreadsheets/d/1gmp7K2Ylekqr7nEIo-SYdDUULPaWb4jVhRnz-K2i9W4/edit" target="_blank" rel="noopener" data-i18n="footer_sheet"></a>
-      <span data-i18n="footer_author"></span>
+      <a href="https://docs.google.com/spreadsheets/d/1gmp7K2Ylekqr7nEIo-SYdDUULPaWb4jVhRnz-K2i9W4/edit" target="_blank" rel="noopener" data-i18n="footer_sheet">Više voliš tablicu? Otvori Google Sheets verziju →</a>
+      <span data-i18n="footer_author">Izradio i održava Tabu.</span>
     </div>
-    <span><span data-i18n="footer_contact"></span> <a href="mailto:vatroslav@tabu.hr">vatroslav@tabu.hr</a></span>
+    <span><span data-i18n="footer_contact">Pitanja ili povratne informacije? Piši mi na</span> <a href="mailto:vatroslav@tabu.hr">vatroslav@tabu.hr</a></span>
   </footer>
 </div>
 
 <div class="mobile-bar">
   <div class="mobile-bar__text">
-    <span class="mobile-bar__label" data-i18n="r_total"></span>
+    <span class="mobile-bar__label" data-i18n="r_total">Ukupni trošak odlaska</span>
     <span class="mobile-bar__value" id="mb-total">—</span>
-    <span class="mobile-bar__sub"><span data-i18n="r_total_chance"></span> <span id="mb-total-chance">—</span></span>
+    <span class="mobile-bar__sub"><span data-i18n="r_total_chance">Uvećan za šansu ranog odlaska</span> <span id="mb-total-chance">—</span></span>
   </div>
-  <a href="#razrada" data-i18n="details"></a>
+  <a href="#razrada" data-i18n="details">Razrada ↓</a>
 </div>
 
 <script src="/assets/lang.js"></script>
@@ -323,7 +329,7 @@ const I18N = {
 
 const CTA_UTM = 'utm_source=kalkulator&utm_medium=cta&utm_campaign=turnover';
 
-let lang = window.tabuLang.initial();
+const lang = window.tabuLang.initial();
 let touched = new Set();   // linked-default fields the user has manually overridden
 
 /* Build the input DOM: one card per group, fields as label + number input rows */
@@ -513,13 +519,6 @@ function applyLang(){
   compute();
 }
 
-document.querySelectorAll('.lang-toggle button').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    lang = b.dataset.lang;
-    window.tabuLang.save(lang);
-    applyLang();
-  });
-});
 document.getElementById('reset').addEventListener('click', ()=>{
   buildInputs();   // restores the Sheet default values
   applyLang();

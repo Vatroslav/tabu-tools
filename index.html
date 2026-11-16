@@ -6,14 +6,20 @@
 <title>Tabu kalkulatori</title>
 <meta name="description" content="Besplatni alati Tabua za privatne i poslovne korisnike: kalkulator plaće bruto-neto i kalkulator troška odlaska zaposlenika.">
 <link rel="canonical" href="https://kalkulator.tabu.hr/">
+<link rel="alternate" hreflang="hr" href="https://kalkulator.tabu.hr/">
+<link rel="alternate" hreflang="sr" href="https://kalkulator.tabu.hr/">
+<link rel="alternate" hreflang="bs" href="https://kalkulator.tabu.hr/">
+<link rel="alternate" hreflang="en" href="https://kalkulator.tabu.hr/en/">
+<link rel="alternate" hreflang="sr-ME" href="https://kalkulator.tabu.hr/en/">
+<link rel="alternate" hreflang="x-default" href="https://kalkulator.tabu.hr/en/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tabu">
 <meta property="og:url" content="https://kalkulator.tabu.hr/">
 <meta property="og:title" content="Tabu kalkulatori">
 <meta property="og:description" content="Besplatni alati Tabua za privatne i poslovne korisnike.">
 <meta name="twitter:card" content="summary">
-<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e90533795492dddde50_Tabu%20Favicon%20(1).png">
-<link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/6596bfc5feee70a92dbebd66/65b93e972f8a8eb254344232_Tabu%20Favicon.png">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script>(function(){var t;try{t=localStorage.getItem('tabu-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script>
 <script async src="https://plausible.io/js/pa-XqHFUt1YAuA5CX0Bw_nm7.js"></script>
 <script>
@@ -108,7 +114,7 @@
   </header>
 
   <main class="tools">
-    <a class="tool tool--placa" data-href="/placa/" href="/placa/">
+    <a class="tool tool--placa" href="/placa/">
       <div class="tool__tags">
         <span data-i18n="placa_tag1">Hrvatska</span>
         <span data-i18n="placa_tag2">Srbija</span>
@@ -118,7 +124,7 @@
       <p data-i18n="placa_desc">Bruto u neto, neto u bruto i trošak poslodavca za Hrvatsku, Srbiju, te Bosnu i Hercegovinu, s poreznim olakšicama.</p>
       <span class="go" data-i18n="open">Otvori →</span>
     </a>
-    <a class="tool tool--turnover" data-href="/turnover/" href="/turnover/">
+    <a class="tool tool--turnover" href="/turnover/">
       <div class="tool__tags">
         <span data-i18n="turnover_tag1">Prazna pozicija</span>
         <span data-i18n="turnover_tag2">Zapošljavanje</span>
@@ -200,30 +206,17 @@ const I18N = {
   },
 };
 
-let lang = window.tabuLang.initial();
+const lang = window.tabuLang.initial();
 
 function applyLang(){
   const t = I18N[lang];
   document.documentElement.lang = lang;
   document.title = t.doc_title;
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t[el.dataset.i18n]; });
-  // Links keep the chosen language only when it was picked explicitly
-  const explicit = new URLSearchParams(location.search).get('lang');
-  document.querySelectorAll('.tool').forEach(a => {
-    a.href = a.dataset.href + (explicit ? '?lang=' + explicit : '');
-  });
   document.getElementById('lang-en').setAttribute('aria-pressed', String(lang==='en'));
   document.getElementById('lang-hr').setAttribute('aria-pressed', String(lang==='hr'));
   window.tabuTheme.apply();
 }
-
-document.querySelectorAll('.lang-toggle button').forEach(b => {
-  b.addEventListener('click', () => {
-    lang = b.dataset.lang;
-    window.tabuLang.save(lang);
-    applyLang();
-  });
-});
 
 applyLang();
 </script>
