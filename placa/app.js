@@ -326,7 +326,7 @@ function defaultsFor(country) {
 }
 
 const params = new URLSearchParams(location.search);
-let lang = window.tabuLang.initial();
+const lang = window.tabuLang.initial();
 const state = {
   country: COUNTRIES.includes(params.get('c')) ? params.get('c') : 'HR',
   dir: DIRECTIONS.includes(params.get('d')) ? params.get('d') : 'g2n',
@@ -349,9 +349,7 @@ for (const f of FIELDS[state.country]) {
 
 function syncUrl() {
   const u = new URL(location.href);
-  const keep = u.searchParams.get('lang');
   u.search = '';
-  if (keep) u.searchParams.set('lang', keep);
   u.searchParams.set('c', state.country);
   u.searchParams.set('d', state.dir);
   u.searchParams.set('a', String(state.amount[state.country]));
@@ -776,14 +774,6 @@ function applyLang() {
   renderInputs();
   update();
 }
-
-document.querySelectorAll('.lang-toggle button').forEach((b) => {
-  b.addEventListener('click', () => {
-    lang = b.dataset.lang;
-    window.tabuLang.save(lang);
-    applyLang();
-  });
-});
 
 $('reset').addEventListener('click', () => {
   state.fields[state.country] = defaultsFor(state.country);

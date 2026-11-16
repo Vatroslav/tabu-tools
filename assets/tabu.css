@@ -93,6 +93,13 @@ button{cursor:pointer}
 }
 .lang-toggle button[aria-pressed="true"]{background:var(--inv-bg);color:var(--inv-fg)}
 
+/* Offer of the other language version (assets/lang.js) */
+.lang-offer{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;padding:8px 8px 8px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg-elevated);font-size:14px;color:var(--text-secondary)}
+.lang-offer a{font-weight:600;text-decoration:none}
+.lang-offer a:hover{text-decoration:underline}
+.lang-offer__close{margin-left:auto;width:32px;height:32px;border:0;border-radius:999px;background:transparent;font-size:20px;line-height:1;color:var(--text-muted)}
+.lang-offer__close:hover{background:var(--bg-subtle);color:var(--text)}
+
 /* Call-to-action link */
 .cta{
   display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;
